@@ -14,9 +14,9 @@ const styles = {
 };
 
 export default function UploadDocument({ token }) {
-  const [file, setFile]       = useState(null);
-  const [status, setStatus]   = useState("");
-  const [error, setError]     = useState("");
+  const [file, setFile] = useState(null);
+  const [status, setStatus] = useState("");
+  const [error, setError] = useState("");
   const [dragging, setDragging] = useState(false);
   const inputRef = useRef();
 
@@ -32,7 +32,8 @@ export default function UploadDocument({ token }) {
     setError("");
 
     try {
-      const body = await file.arrayBuffer();
+      const arrayBuffer = await file.arrayBuffer();
+      const body = new Uint8Array(arrayBuffer);
 
       const s3 = new S3Client({
         region: config.region,
@@ -44,14 +45,15 @@ export default function UploadDocument({ token }) {
       });
 
       await s3.send(new PutObjectCommand({
-        Bucket:      config.documentsBucket,
-        Key:         `uploads/${Date.now()}_${file.name}`,
-        Body:        new Blob([body], { type: file.type }),
+        Bucket: config.documentsBucket,
+        Key: `uploads/${Date.now()}_${file.name}`,
+        Body: body,
         ContentType: file.type
       }));
 
       setStatus(`✅ "${file.name}" uploadé avec succès — traitement en cours...`);
       setFile(null);
+      setTimeout(() => setStatus(""), 5000);
     } catch (err) {
       setError(`Erreur : ${err.message}`);
       setStatus("");
@@ -78,7 +80,7 @@ export default function UploadDocument({ token }) {
 
       {file && <button style={styles.btn} onClick={handleUpload}>Envoyer</button>}
       {status && <p style={styles.progress}>{status}</p>}
-      {error  && <p style={styles.error}>{error}</p>}
+      {error && <p style={styles.error}>{error}</p>}
     </div>
   );
 }
