@@ -31,6 +31,7 @@ resource "aws_rds_cluster" "aurora" {
   skip_final_snapshot     = true
   storage_encrypted       = true
   kms_key_id              = aws_kms_key.main.arn
+  enable_http_endpoint    = true
 
   serverlessv2_scaling_configuration {
     max_capacity = 2.0

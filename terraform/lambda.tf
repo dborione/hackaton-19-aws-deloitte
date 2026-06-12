@@ -5,6 +5,7 @@ resource "aws_lambda_function" "document_processor" {
   role          = aws_iam_role.lambda_processor_role.arn
   handler       = "index.handler"
   runtime       = "nodejs18.x"
+  timeout       = 60
 
   vpc_config {
     subnet_ids         = aws_subnet.private[*].id
@@ -52,6 +53,7 @@ resource "aws_lambda_function" "api_backend" {
   role          = aws_iam_role.lambda_processor_role.arn # On peut réutiliser le même ou en créer un plus restreint
   handler       = "index.handler"
   runtime       = "nodejs18.x"
+  timeout       = 30
 
   vpc_config {
     subnet_ids         = aws_subnet.private[*].id

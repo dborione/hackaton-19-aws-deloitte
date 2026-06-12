@@ -1,6 +1,6 @@
 const { RDSDataClient, ExecuteStatementCommand } = require("@aws-sdk/client-rds-data");
 
-const rds = new RDSDataClient({ region: process.env.AWS_REGION });
+const rds = new RDSDataClient({ region: process.env.AWS_REGION, requestTimeout: 5000 });
 
 const DB_PARAMS = {
   resourceArn: process.env.DB_CLUSTER_ARN,

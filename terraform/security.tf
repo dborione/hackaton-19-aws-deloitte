@@ -4,6 +4,14 @@ resource "aws_security_group" "lambda_sg" {
   description = "Security group for Lambda functions"
   vpc_id      = aws_vpc.main.id
 
+  ingress {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = [var.vpc_cidr]
+    description = "HTTPS from within VPC (for VPC endpoints)"
+  }
+
   egress {
     from_port   = 0
     to_port     = 0
