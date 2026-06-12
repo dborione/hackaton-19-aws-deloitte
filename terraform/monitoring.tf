@@ -19,6 +19,7 @@ resource "aws_cloudwatch_metric_alarm" "lambda_errors" {
   threshold           = "1"
   alarm_description   = "Cette alarme se déclenche si une fonction Lambda échoue."
   actions_enabled     = true
+  alarm_actions       = [aws_sns_topic.alerts.arn]
 
   dimensions = {
     FunctionName = aws_lambda_function.document_processor.function_name

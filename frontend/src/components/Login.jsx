@@ -11,7 +11,7 @@ const styles = {
   error: { background: "#ffeaea", color: "#c0392b", padding: "10px 12px", borderRadius: 4, marginBottom: 16, fontSize: 14 }
 };
 
-export default function Login({ onLogin }) {
+export default function Login({ onLogin, onGoRegister }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError]       = useState("");
@@ -38,13 +38,19 @@ export default function Login({ onLogin }) {
         {error && <div style={styles.error}>{error}</div>}
         <form onSubmit={handleSubmit}>
           <label style={styles.label}>Email</label>
-          <input style={styles.input} type="email" value={username} onChange={e => setUsername(e.target.value)} required />
+          <input style={styles.input} type="email" value={username} onChange={e => setUsername(e.target.value)} autoComplete="email" required />
           <label style={styles.label}>Mot de passe</label>
-          <input style={styles.input} type="password" value={password} onChange={e => setPassword(e.target.value)} required />
+          <input style={styles.input} type="password" value={password} onChange={e => setPassword(e.target.value)} autoComplete="current-password" required />
           <button style={styles.btn} type="submit" disabled={loading}>
             {loading ? "Connexion..." : "Se connecter"}
           </button>
         </form>
+        <div style={{ marginTop: 16, textAlign: "center", fontSize: 14, color: "#666" }}>
+          Pas encore de compte ?{" "}
+          <button style={{ color: "#ff9900", background: "none", border: "none", cursor: "pointer", fontWeight: "bold", fontSize: 14 }} onClick={onGoRegister}>
+            S'inscrire
+          </button>
+        </div>
       </div>
     </div>
   );

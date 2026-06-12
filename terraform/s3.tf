@@ -37,6 +37,20 @@ resource "aws_s3_bucket" "logs" {
   bucket = "${var.project_name}-logs-${var.environment}"
 }
 
+# Autoriser CloudFront (OAI) à lire le bucket web_frontend
+resource "aws_s3_bucket_policy" "web_frontend_cloudfront" {
+  bucket = aws_s3_bucket.web_frontend.id
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect    = "Allow"
+      Principal = { AWS = aws_cloudfront_origin_access_identity.oai.iam_arn }
+      Action    = "s3:GetObject"
+      Resource  = "${aws_s3_bucket.web_frontend.arn}/*"
+    }]
+  })
+}
+
 # Bloquer l'accès public (Best Practice)
 resource "aws_s3_bucket_public_access_block" "documents" {
   bucket = aws_s3_bucket.documents.id

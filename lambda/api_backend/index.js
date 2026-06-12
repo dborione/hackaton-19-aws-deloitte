@@ -8,15 +8,27 @@ const DB_PARAMS = {
   database:    process.env.DB_NAME
 };
 
+const CORS_HEADERS = {
+  "Content-Type":                "application/json",
+  "Access-Control-Allow-Origin":  "*",
+  "Access-Control-Allow-Methods": "GET,OPTIONS",
+  "Access-Control-Allow-Headers": "Authorization,Content-Type"
+};
+
 const response = (statusCode, body) => ({
   statusCode,
-  headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
+  headers: CORS_HEADERS,
   body: JSON.stringify(body)
 });
 
 exports.handler = async (event) => {
   const method = event.httpMethod;
   const path   = event.path;
+
+  // Preflight CORS
+  if (method === "OPTIONS") {
+    return { statusCode: 200, headers: CORS_HEADERS, body: "" };
+  }
 
   try {
     // GET /data/documents — liste tous les documents traités
@@ -40,7 +52,7 @@ exports.handler = async (event) => {
       const id = path.split("/").pop();
       const result = await rds.send(new ExecuteStatementCommand({
         ...DB_PARAMS,
-        sql: "SELECT id, file_key, extracted_text, processed_at FROM documents WHERE id = :id",
+        sql: "SELECT id, file_key, raw_text, forms, tables, processed_at FROM documents WHERE id = :id",
         parameters: [{ name: "id", value: { longValue: parseInt(id) } }]
       }));
 
@@ -48,10 +60,12 @@ exports.handler = async (event) => {
 
       const row = result.records[0];
       return response(200, {
-        id:             row[0].longValue,
-        file_key:       row[1].stringValue,
-        extracted_text: row[2].stringValue,
-        processed_at:   row[3].stringValue
+        id:           row[0].longValue,
+        file_key:     row[1].stringValue,
+        raw_text:     row[2].stringValue,
+        forms:        JSON.parse(row[3].stringValue || "{}"),
+        tables:       JSON.parse(row[4].stringValue || "[]"),
+        processed_at: row[5].stringValue
       });
     }
 

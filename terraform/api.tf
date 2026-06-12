@@ -18,6 +18,23 @@ resource "aws_api_gateway_method" "method" {
   authorizer_id = aws_api_gateway_authorizer.cognito.id
 }
 
+# OPTIONS sans auth pour le preflight CORS
+resource "aws_api_gateway_method" "options" {
+  rest_api_id   = aws_api_gateway_rest_api.api.id
+  resource_id   = aws_api_gateway_resource.resource.id
+  http_method   = "OPTIONS"
+  authorization = "NONE"
+}
+
+resource "aws_api_gateway_integration" "options" {
+  rest_api_id             = aws_api_gateway_rest_api.api.id
+  resource_id             = aws_api_gateway_resource.resource.id
+  http_method             = aws_api_gateway_method.options.http_method
+  integration_http_method = "POST"
+  type                    = "AWS_PROXY"
+  uri                     = aws_lambda_function.api_backend.invoke_arn
+}
+
 resource "aws_api_gateway_authorizer" "cognito" {
   name          = "${var.project_name}-cognito-authorizer"
   type          = "COGNITO_USER_POOLS"
@@ -42,6 +59,26 @@ resource "aws_lambda_permission" "api_gw" {
   source_arn    = "${aws_api_gateway_rest_api.api.execution_arn}/*/*"
 }
 
+# Déploiement et stage API Gateway
+resource "aws_api_gateway_deployment" "api" {
+  rest_api_id = aws_api_gateway_rest_api.api.id
+  depends_on  = [aws_api_gateway_integration.integration]
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+resource "aws_api_gateway_stage" "prod" {
+  deployment_id = aws_api_gateway_deployment.api.id
+  rest_api_id   = aws_api_gateway_rest_api.api.id
+  stage_name    = "prod"
+
+  tags = {
+    Name = "${var.project_name}-api-prod"
+  }
+}
+
 # CloudFront Distribution
 resource "aws_cloudfront_origin_access_identity" "oai" {
   comment = "OAI for ${var.project_name} web frontend"
@@ -49,9 +86,16 @@ resource "aws_cloudfront_origin_access_identity" "oai" {
 
 resource "aws_cloudfront_distribution" "web" {
   origin {
-    domain_name = aws_api_gateway_rest_api.api.execution_arn # simplification pour l'exemple
+    domain_name = "${aws_api_gateway_rest_api.api.id}.execute-api.${var.aws_region}.amazonaws.com"
     origin_id   = "APIGateway"
-    # Note: En réalité, on mixerait S3 pour le statique et API GW pour le dynamique
+    origin_path = "/${aws_api_gateway_stage.prod.stage_name}"
+
+    custom_origin_config {
+      http_port              = 80
+      https_port             = 443
+      origin_protocol_policy = "https-only"
+      origin_ssl_protocols   = ["TLSv1.2"]
+    }
   }
 
   origin {
@@ -83,6 +127,26 @@ resource "aws_cloudfront_distribution" "web" {
     min_ttl                = 0
     default_ttl            = 3600
     max_ttl                = 86400
+  }
+
+  ordered_cache_behavior {
+    path_pattern     = "/data*"
+    allowed_methods  = ["GET", "HEAD", "OPTIONS", "PUT", "POST", "PATCH", "DELETE"]
+    cached_methods   = ["GET", "HEAD"]
+    target_origin_id = "APIGateway"
+
+    forwarded_values {
+      query_string = true
+      headers      = ["Authorization"]
+      cookies {
+        forward = "none"
+      }
+    }
+
+    viewer_protocol_policy = "redirect-to-https"
+    min_ttl                = 0
+    default_ttl            = 0
+    max_ttl                = 0
   }
 
   restrictions {

@@ -53,9 +53,63 @@ resource "aws_iam_role_policy_attachment" "lambda_s3" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess"
 }
 
+# Permission de suppression des fichiers après traitement
+resource "aws_iam_role_policy" "lambda_s3_delete" {
+  name = "s3-delete-after-processing"
+  role = aws_iam_role.lambda_processor_role.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect   = "Allow"
+      Action   = "s3:DeleteObject"
+      Resource = "${aws_s3_bucket.documents.arn}/*"
+    }]
+  })
+}
+
 resource "aws_iam_role_policy_attachment" "lambda_vpc" {
   role       = aws_iam_role.lambda_processor_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
+}
+
+# Policy inline pour accès Secrets Manager (secret RDS) et RDS Data API
+resource "aws_iam_role_policy" "lambda_secrets_rds" {
+  name = "secrets-rds-policy"
+  role = aws_iam_role.lambda_processor_role.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "secretsmanager:GetSecretValue",
+          "secretsmanager:DescribeSecret"
+        ]
+        Resource = aws_rds_cluster.aurora.master_user_secret[0].secret_arn
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "rds-data:ExecuteStatement",
+          "rds-data:BatchExecuteStatement",
+          "rds-data:BeginTransaction",
+          "rds-data:CommitTransaction",
+          "rds-data:RollbackTransaction"
+        ]
+        Resource = aws_rds_cluster.aurora.arn
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "kms:Decrypt",
+          "kms:GenerateDataKey"
+        ]
+        Resource = aws_kms_key.main.arn
+      }
+    ]
+  })
 }
 
 # KMS Key pour le chiffrement des données (S3 & RDS)

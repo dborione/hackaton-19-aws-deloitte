@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
-import { fromCognitoIdentityPool } from "@aws-sdk/credential-providers";
+import { fromCognitoIdentityPool } from "@aws-sdk/credential-provider-cognito-identity";
 import config from "../config";
 
 const styles = {
@@ -32,6 +32,8 @@ export default function UploadDocument({ token }) {
     setError("");
 
     try {
+      const body = await file.arrayBuffer();
+
       const s3 = new S3Client({
         region: config.region,
         credentials: fromCognitoIdentityPool({
@@ -42,9 +44,9 @@ export default function UploadDocument({ token }) {
       });
 
       await s3.send(new PutObjectCommand({
-        Bucket: config.documentsBucket,
-        Key:    `uploads/${Date.now()}_${file.name}`,
-        Body:   file,
+        Bucket:      config.documentsBucket,
+        Key:         `uploads/${Date.now()}_${file.name}`,
+        Body:        new Blob([body], { type: file.type }),
         ContentType: file.type
       }));
 

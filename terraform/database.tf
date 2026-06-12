@@ -22,7 +22,7 @@ resource "aws_rds_cluster" "aurora" {
   cluster_identifier      = "${var.project_name}-aurora-cluster"
   engine                  = "aurora-postgresql"
   engine_mode             = "provisioned" # Requis pour Serverless v2
-  engine_version          = "15.4"
+  engine_version          = "16.6"
   database_name           = "franchisedb"
   master_username         = "adminuser"
   manage_master_user_password = true # AWS Secrets Manager
