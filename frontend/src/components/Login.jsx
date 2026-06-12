@@ -1,0 +1,51 @@
+import React, { useState } from "react";
+
+const styles = {
+  container: { minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" },
+  card: { background: "#fff", padding: 40, borderRadius: 8, boxShadow: "0 2px 16px rgba(0,0,0,0.1)", width: 360 },
+  title: { fontSize: 24, fontWeight: "bold", marginBottom: 8, color: "#232f3e" },
+  subtitle: { color: "#666", marginBottom: 24 },
+  label: { display: "block", marginBottom: 4, fontWeight: "bold", fontSize: 14 },
+  input: { width: "100%", padding: "10px 12px", border: "1px solid #ddd", borderRadius: 4, marginBottom: 16, fontSize: 14 },
+  btn: { width: "100%", padding: "12px", background: "#ff9900", color: "#fff", border: "none", borderRadius: 4, fontSize: 16, cursor: "pointer", fontWeight: "bold" },
+  error: { background: "#ffeaea", color: "#c0392b", padding: "10px 12px", borderRadius: 4, marginBottom: 16, fontSize: 14 }
+};
+
+export default function Login({ onLogin }) {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError]       = useState("");
+  const [loading, setLoading]   = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
+    try {
+      await onLogin(username, password);
+    } catch (err) {
+      setError(err.message || "Erreur de connexion");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div style={styles.container}>
+      <div style={styles.card}>
+        <h1 style={styles.title}>Franchise App</h1>
+        <p style={styles.subtitle}>Connectez-vous pour accéder à votre espace</p>
+        {error && <div style={styles.error}>{error}</div>}
+        <form onSubmit={handleSubmit}>
+          <label style={styles.label}>Email</label>
+          <input style={styles.input} type="email" value={username} onChange={e => setUsername(e.target.value)} required />
+          <label style={styles.label}>Mot de passe</label>
+          <input style={styles.input} type="password" value={password} onChange={e => setPassword(e.target.value)} required />
+          <button style={styles.btn} type="submit" disabled={loading}>
+            {loading ? "Connexion..." : "Se connecter"}
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+}

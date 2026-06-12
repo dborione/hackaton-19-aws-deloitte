@@ -1,0 +1,26 @@
+# Terraform
+**/.terraform/
+**/.terraform.lock.hcl
+*.tfstate
+*.tfstate.backup
+*.tfplan
+crash.log
+override.tf
+override.tf.json
+
+# Zips Lambda (générés localement)
+*.zip
+
+# Node.js / Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+frontend/.env.local
+
+# AWS credentials
+.aws/
+*.pem
+
+# OS
+.DS_Store
+Thumbs.db

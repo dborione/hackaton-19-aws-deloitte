@@ -1,0 +1,71 @@
+import React, { useState, useEffect } from "react";
+import { CognitoUserPool, CognitoUser, AuthenticationDetails } from "amazon-cognito-identity-js";
+import Login from "./components/Login";
+import DocumentList from "./components/DocumentList";
+import UploadDocument from "./components/UploadDocument";
+import config from "./config";
+
+const userPool = new CognitoUserPool({
+  UserPoolId: config.userPoolId,
+  ClientId:   config.userPoolClientId
+});
+
+const styles = {
+  nav: { background: "#232f3e", color: "#fff", padding: "16px 32px", display: "flex", justifyContent: "space-between", alignItems: "center" },
+  main: { maxWidth: 900, margin: "32px auto", padding: "0 16px" },
+  btn: { background: "#ff9900", color: "#fff", border: "none", padding: "8px 16px", borderRadius: 4, cursor: "pointer" }
+};
+
+export default function App() {
+  const [user, setUser] = useState(null);
+  const [token, setToken] = useState(null);
+
+  useEffect(() => {
+    const current = userPool.getCurrentUser();
+    if (current) {
+      current.getSession((err, session) => {
+        if (!err && session.isValid()) {
+          setUser(current);
+          setToken(session.getIdToken().getJwtToken());
+        }
+      });
+    }
+  }, []);
+
+  const handleLogin = (username, password) => {
+    return new Promise((resolve, reject) => {
+      const cognitoUser = new CognitoUser({ Username: username, Pool: userPool });
+      const authDetails = new AuthenticationDetails({ Username: username, Password: password });
+
+      cognitoUser.authenticateUser(authDetails, {
+        onSuccess: (session) => {
+          setUser(cognitoUser);
+          setToken(session.getIdToken().getJwtToken());
+          resolve();
+        },
+        onFailure: reject
+      });
+    });
+  };
+
+  const handleLogout = () => {
+    userPool.getCurrentUser()?.signOut();
+    setUser(null);
+    setToken(null);
+  };
+
+  if (!user) return <Login onLogin={handleLogin} />;
+
+  return (
+    <>
+      <nav style={styles.nav}>
+        <span style={{ fontSize: 20, fontWeight: "bold" }}>Franchise App</span>
+        <button style={styles.btn} onClick={handleLogout}>Déconnexion</button>
+      </nav>
+      <main style={styles.main}>
+        <UploadDocument token={token} />
+        <DocumentList token={token} />
+      </main>
+    </>
+  );
+}
