@@ -451,8 +451,8 @@ export default function Dashboard({ token, onLogout, onNavigate }) {
   return (
     <>
       <nav style={styles.nav}>
-        <span style={{ fontSize: 20, fontWeight: "bold" }}>
-          A&G Funeral
+        <span style={{ fontSize: 20, fontWeight: "bold" }} onClick={() => onNavigate("dashboard")}>
+          A&G Funerals
         </span>
 
         <div style={{ display: "flex", gap: 12 }}>
