@@ -486,41 +486,6 @@ async function saveSharedAnswers(event, inviteToken) {
   return response(200, { success: true });
 }
 
-
-async function deleteInvitation(event, invitationIdentifier) {
-  const ownerUserId = getUserId(event);
-
-  if (!ownerUserId) {
-    return response(401, { error: "Unauthorized" });
-  }
-
-  const result = await execute(
-    `
-    DELETE FROM sharing_invitations
-    WHERE id = :invitationId
-      AND owner_user_id = :ownerUserId
-      AND status = 'pending'
-      AND invited_user_id IS NULL
-    RETURNING id
-    `,
-    [
-      longParam("invitationId", invitationIdentifier),
-      stringParam("ownerUserId", ownerUserId)
-    ]
-  );
-
-  if (!result.records || result.records.length === 0) {
-    return response(403, {
-      error: "Invitation cannot be deleted. It may not exist, may not belong to you, or may already be accepted."
-    });
-  }
-
-  return response(200, {
-    success: true,
-    deletedInvitationId: fieldValue(result.records[0][0])
-  });
-}
-
 async function getReceivedAnswers(event) {
   const ownerUserId = getUserId(event);
 
@@ -651,10 +616,6 @@ async function tryHandleSharingRoute(event) {
 
   if (invitationMatch && method === "GET") {
     return getInvitation(event, invitationMatch[1]);
-  }
-
-  if (invitationMatch && method === "DELETE") {
-    return deleteInvitation(event, invitationMatch[1]);
   }
 
   const acceptMatch = path.match(/\/sharing\/invitations\/([^/]+)\/accept$/);
