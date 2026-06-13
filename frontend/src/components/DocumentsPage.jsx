@@ -81,14 +81,32 @@ function normalizeKey(key) {
 
 /**
  * Maps Textract forms JSON to identity question IDs.
- * Tries to find matching keys and reassembles full name if needed.
+ * Handles bilingual keys with "/" separator (e.g., "Vornamen / Given names").
+ * Tries full key first, then the part after "/" if bilingual.
  */
 function mapToAnswers(forms, fieldMap) {
     const answers = {};
     for (const [rawKey, value] of Object.entries(forms)) {
+        if (!value) continue;
+        
         const normalized = normalizeKey(rawKey);
-        if (fieldMap[normalized] && value) {
+        
+        // Try full normalized key first
+        if (fieldMap[normalized]) {
             answers[fieldMap[normalized]] = value;
+            continue;
+        }
+        
+        // Try splitting by "/" and using the part after it (for bilingual keys)
+        if (rawKey.includes("/")) {
+            const parts = rawKey.split("/").map(p => p.trim());
+            for (const part of parts) {
+                const partNormalized = normalizeKey(part);
+                if (fieldMap[partNormalized]) {
+                    answers[fieldMap[partNormalized]] = value;
+                    break;
+                }
+            }
         }
     }
 
@@ -509,8 +527,12 @@ export default function DocumentsPage({ token, onBack }) {
             return;
         }
         const res = await fetch(url.toString(), {
-            headers: { Authorization: token }
+            headers: { Authorization: `Bearer ${token}` }
         });
+        if (!res.ok) {
+            console.error(`Failed to fetch document: ${res.status} ${res.statusText}`);
+            return;
+        }
         const data = await res.json();
         setSelectedDetail(data);
     };
