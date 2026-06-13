@@ -21,6 +21,7 @@ const IDENTITY_FIELD_MAP = {
     "name": "birth_name",  // Belgian ID: "Name / Name" → birth_name
     "Nom / Name": "birth_name",  // Belgian ID: bilingual
     "Naam / Name": "birth_name",  // Belgian ID: bilingual
+    "vorsumen, .": "birth_name",  // Belgian ID: bilingual
 
     // First name variants
     "first name": "first_names",
@@ -36,6 +37,8 @@ const IDENTITY_FIELD_MAP = {
     "Given names": "first_names",  // bilingual
     "Prénoms / Given names": "first_names",  // bilingual
     "Voornamen / Given names": "first_names",  // bilingual
+    "Name, Name": "first_names",  // Belgian ID: "Name, Name" → first_names
+
     
     // Birth date variants
     "date of birth": "birth_date",
@@ -46,6 +49,8 @@ const IDENTITY_FIELD_MAP = {
     "birthdate": "birth_date",
     "date_of_birth": "birth_date",
     "Date or birth": "birth_date",  // Belgian ID: bilingual
+    "Geoutstin/ Date of -": "birth_date",  // Belgian ID: bilingual
+
 
     // Birth place variants
     "place of birth": "birth_place",
@@ -69,7 +74,8 @@ const IDENTITY_FIELD_MAP = {
     "numéro de carte": "national_register_number",
     "Rijksregisternr. / National Register N°": "national_register_number",  // Belgian ID
     "Nationalregisternr. / National Register N°": "national_register_number",  // Belgian ID
-
+    "/ Naturel Register N°": "national_register_number",  // Belgian ID
+    
     // Full name (for later reassembly if needed)
     "full name": "cover_full_name",
     "nom prénom": "cover_full_name",
