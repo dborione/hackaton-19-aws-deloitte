@@ -451,11 +451,13 @@ export default function Dashboard({ token, onLogout, onNavigate }) {
   return (
     <>
       <nav style={styles.nav}>
-        <span
-          style={{ fontSize: 20, fontWeight: "bold", cursor: "pointer" }}
-          onClick={() => onNavigate && onNavigate("dashboard")}
-        >
+<<<<<<< HEAD
+        <span style={{ fontSize: 20, fontWeight: "bold" }}>
+          A&G Funeral
+=======
+        <span style={{ fontSize: 20, fontWeight: "bold" }} onClick={() => onNavigate("dashboard")}>
           A&G Funerals
+>>>>>>> dborione
         </span>
 
         <div style={{ display: "flex", gap: 12 }}>
@@ -469,7 +471,7 @@ export default function Dashboard({ token, onLogout, onNavigate }) {
 
           <button
             style={styles.btn}
-            onClick={() => onNavigate && onNavigate("documents")}
+            onClick={() => onNavigate("documents")}
           >
             Documents
           </button>
