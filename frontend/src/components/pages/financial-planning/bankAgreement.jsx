@@ -1,15 +1,15 @@
 import QuestionPage from "../questionPage";
 
 export const questions = [
-  { id: "bank", label: "Banque :" },
-  { id: "agreement_reference", label: "Référence de la convention :" }
+  { id: "bank", label: "Bank:", category: "easy" },
+  { id: "agreement_reference", label: "Bank agreement reference:", category: "technical" }
 ];
 
 export default function BankAgreement({ token }) {
   return (
     <QuestionPage
       pageId="bank-agreement"
-      title="Convention bancaire"
+      title="Bank Agreement"
       questions={questions}
       token={token}
     />

@@ -1,28 +1,28 @@
 import QuestionPage from "../questionPage";
 
 export const questions = [
-  { id: "civil_ceremony", label: "Civiles :", type: "yesno" },
-  { id: "ag_funeral_ceremony_room", label: "Salle de cérémonie d’A&G Funeral :", showIf: { id: "civil_ceremony", equals: "yes" } },
-  { id: "civil_crematorium_room", label: "Salle du crématorium de :", showIf: { id: "civil_ceremony", equals: "yes" } },
-  { id: "civil_other_place", label: "Autre lieu :", showIf: { id: "civil_ceremony", equals: "yes" } },
-  { id: "religious_ceremony", label: "Religieuses :", type: "yesno" },
-  { id: "blessing", label: "Bénédiction", type: "yesno", showIf: { id: "religious_ceremony", equals: "yes" } },
-  { id: "mass", label: "Messe", type: "yesno", showIf: { id: "religious_ceremony", equals: "yes" } },
-  { id: "religious_other", label: "Autre :", showIf: { id: "religious_ceremony", equals: "yes" } },
-  { id: "place_of_worship", label: "Lieu de culte :", showIf: { id: "religious_ceremony", equals: "yes" } },
-  { id: "religious_crematorium_room", label: "Salle du crématorium de :", showIf: { id: "religious_ceremony", equals: "yes" } },
-  { id: "religious_other_place", label: "Autre lieu :", showIf: { id: "religious_ceremony", equals: "yes" } },
-  { id: "theme_clothing", label: "Touche ou tenue thématique pour mes proches (ex : porter des couleurs) :", type: "textarea" },
-  { id: "everyone_present", label: "En présence de tous ceux qui le souhaitent", type: "yesno" },
-  { id: "privacy", label: "Dans l’intimité", type: "yesno" },
-  { id: "let_relatives_choose", label: "Je laisse mes proches choisir", type: "yesno" }
+  { id: "civil_ceremony", label: "Civil ceremony:", type: "yesno", category: "easy" },
+  { id: "ag_funeral_ceremony_room", label: "A&G Funeral ceremony room:", showIf: { id: "civil_ceremony", equals: "yes" }, category: "technical" },
+  { id: "civil_crematorium_room", label: "Crematorium room in:", showIf: { id: "civil_ceremony", equals: "yes" }, category: "technical" },
+  { id: "civil_other_place", label: "Other place:", showIf: { id: "civil_ceremony", equals: "yes" }, category: "technical" },
+  { id: "religious_ceremony", label: "Religious ceremony:", type: "yesno", category: "easy" },
+  { id: "blessing", label: "Blessing", type: "yesno", showIf: { id: "religious_ceremony", equals: "yes" }, category: "easy" },
+  { id: "mass", label: "Mass", type: "yesno", showIf: { id: "religious_ceremony", equals: "yes" }, category: "easy" },
+  { id: "religious_other", label: "Other:", showIf: { id: "religious_ceremony", equals: "yes" }, category: "easy" },
+  { id: "place_of_worship", label: "Place of worship:", showIf: { id: "religious_ceremony", equals: "yes" }, category: "technical" },
+  { id: "religious_crematorium_room", label: "Crematorium room in:", showIf: { id: "religious_ceremony", equals: "yes" }, category: "technical" },
+  { id: "religious_other_place", label: "Other place:", showIf: { id: "religious_ceremony", equals: "yes" }, category: "technical" },
+  { id: "theme_clothing", label: "Theme detail or clothing for my relatives, for example wearing specific colors:", type: "textarea", category: "easy" },
+  { id: "everyone_present", label: "In the presence of everyone who wishes to attend", type: "yesno", category: "easy" },
+  { id: "privacy", label: "In private", type: "yesno", category: "easy" },
+  { id: "let_relatives_choose", label: "I let my relatives choose", type: "yesno", category: "easy" }
 ];
 
 export default function CeremonyType({ token }) {
   return (
     <QuestionPage
       pageId="ceremony-type"
-      title="Type de cérémonie"
+      title="Ceremony Type"
       questions={questions}
       token={token}
     />

@@ -3,26 +3,26 @@ import QuestionPage from "../questionPage";
 const allowPrinted = { id: "no_printed_material", equals: "no" };
 
 export const questions = [
-  { id: "no_printed_material", label: "Je ne souhaite aucun imprimé, quel qu’il soit", type: "yesno" },
-  { id: "family_chooses_printed_material", label: "Je laisse ma famille choisir", type: "yesno", showIf: allowPrinted },
-  { id: "press_necrology", label: "Nécrologie dans la presse (texte à annexer)", type: "yesno", showIf: allowPrinted },
-  { id: "newspapers_choice", label: "Choix du journal ou des journaux :", showIf: { id: "press_necrology", equals: "yes" } },
-  { id: "announcement_card", label: "Faire-part (texte / photos à annexer)", type: "yesno", showIf: allowPrinted },
-  { id: "digital_announcements", label: "Annonces digitales en ligne (site web, réseaux sociaux)", type: "yesno", showIf: allowPrinted },
-  { id: "coffin_photo_enlargement", label: "Agrandissement photo sur le cercueil : (photo à annexer)", type: "yesno", showIf: allowPrinted },
-  { id: "photo_formats", label: "Formats : A4 / A2 / A1 / A0 / Autres :", showIf: { id: "coffin_photo_enlargement", equals: "yes" } },
-  { id: "photos_location", label: "La / les photo(s) se trouve(nt) :", showIf: { id: "coffin_photo_enlargement", equals: "yes" } },
-  { id: "obiit", label: "Obiit (armoiries de famille)", type: "yesno", showIf: allowPrinted },
-  { id: "funeral_board", label: "Tableau funéraire (pêle-mêle, chevalet, œuvre…)", type: "yesno", showIf: allowPrinted },
-  { id: "thanks", label: "Remerciements (texte / photos à annexer)", type: "yesno", showIf: allowPrinted },
-  { id: "printed_other", label: "Autre :", showIf: allowPrinted }
+  { id: "no_printed_material", label: "I do not want any printed material", type: "yesno", category: "easy" },
+  { id: "family_chooses_printed_material", label: "I let my family choose", type: "yesno", showIf: allowPrinted, category: "easy" },
+  { id: "press_necrology", label: "Obituary in the press, with text to attach", type: "yesno", showIf: allowPrinted, category: "technical" },
+  { id: "newspapers_choice", label: "Choice of newspaper(s):", showIf: { id: "press_necrology", equals: "yes" }, category: "technical" },
+  { id: "announcement_card", label: "Announcement card, with text/photos to attach", type: "yesno", showIf: allowPrinted, category: "technical" },
+  { id: "digital_announcements", label: "Online digital announcements, website or social media", type: "yesno", showIf: allowPrinted, category: "easy" },
+  { id: "coffin_photo_enlargement", label: "Enlarged photo on the coffin, with photo to attach", type: "yesno", showIf: allowPrinted, category: "technical" },
+  { id: "photo_formats", label: "Formats: A4 / A2 / A1 / A0 / other:", showIf: { id: "coffin_photo_enlargement", equals: "yes" }, category: "easy" },
+  { id: "photos_location", label: "The photo(s) are located at:", showIf: { id: "coffin_photo_enlargement", equals: "yes" }, category: "technical" },
+  { id: "obiit", label: "Obit, family coat of arms", type: "yesno", showIf: allowPrinted, category: "technical" },
+  { id: "funeral_board", label: "Funeral board, collage, easel, artwork, etc.", type: "yesno", showIf: allowPrinted, category: "easy" },
+  { id: "thanks", label: "Thank-you cards, with text/photos to attach", type: "yesno", showIf: allowPrinted, category: "technical" },
+  { id: "printed_other", label: "Other printed material:", showIf: allowPrinted, category: "easy" }
 ];
 
 export default function PrintedMaterials({ token }) {
   return (
     <QuestionPage
       pageId="printed-materials"
-      title="Imprimés"
+      title="Printed Materials"
       questions={questions}
       token={token}
     />

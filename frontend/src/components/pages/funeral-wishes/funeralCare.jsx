@@ -1,20 +1,20 @@
 import QuestionPage from "../questionPage";
 
 export const questions = [
-  { id: "ag_funeral_take_care", label: "Je souhaite qu’A&G Funeral prenne soin de moi :", type: "yesno" },
-  { id: "presentation_care", label: "Soins de présentation :", type: "yesno", showIf: { id: "ag_funeral_take_care", equals: "yes" } },
-  { id: "conservation_care", label: "Soins de conservation", type: "yesno", showIf: { id: "ag_funeral_take_care", equals: "yes" } },
-  { id: "specific_outfit_choice", label: "Choix d’une tenue particulière (style de vêtements) :", showIf: { id: "ag_funeral_take_care", equals: "yes" } },
-  { id: "clothes_location", label: "Ces vêtements se trouvent :", showIf: { id: "ag_funeral_take_care", equals: "yes" } },
-  { id: "no_funeral_care", label: "Je ne souhaite pas de soins funéraires", type: "yesno", hideIf: { id: "ag_funeral_take_care", equals: "yes" } },
-  { id: "family_chooses_care", label: "Je laisse ma famille choisir", type: "yesno", hideIf: { id: "ag_funeral_take_care", equals: "yes" } }
+  { id: "ag_funeral_take_care", label: "I would like A&G Funeral to take care of me", type: "yesno", category: "easy" },
+  { id: "presentation_care", label: "Presentation care", type: "yesno", showIf: { id: "ag_funeral_take_care", equals: "yes" }, category: "easy" },
+  { id: "conservation_care", label: "Preservation care", type: "yesno", showIf: { id: "ag_funeral_take_care", equals: "yes" }, category: "technical" },
+  { id: "specific_outfit_choice", label: "Choice of a specific outfit or clothing style:", showIf: { id: "ag_funeral_take_care", equals: "yes" }, category: "easy" },
+  { id: "clothes_location", label: "These clothes are located at:", showIf: { id: "ag_funeral_take_care", equals: "yes" }, category: "easy" },
+  { id: "no_funeral_care", label: "I do not want funeral care", type: "yesno", hideIf: { id: "ag_funeral_take_care", equals: "yes" }, category: "easy" },
+  { id: "family_chooses_care", label: "I let my family choose", type: "yesno", hideIf: { id: "ag_funeral_take_care", equals: "yes" }, category: "easy" }
 ];
 
 export default function FuneralCare({ token }) {
   return (
     <QuestionPage
       pageId="funeral-care"
-      title="Soins & présentation"
+      title="Care and Presentation"
       questions={questions}
       token={token}
     />

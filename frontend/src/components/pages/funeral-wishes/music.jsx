@@ -6,17 +6,17 @@ const chooseMusic = [
 ];
 
 export const questions = [
-  { id: "no_music", label: "Je préfère qu’il n’y ait pas de musique", type: "yesno" },
-  { id: "relatives_choose_music", label: "Je laisse mes proches choisir", type: "yesno", showIf: { id: "no_music", equals: "no" } },
-  { id: "desired_music_accompaniment", label: "Je souhaite l’accompagnement suivant :", type: "textarea", showIf: chooseMusic },
-  { id: "choir_musicians_soloist", label: "J’aimerais une chorale / plusieurs musiciens / un soliste :", type: "textarea", showIf: chooseMusic }
+  { id: "no_music", label: "I would prefer there to be no music", type: "yesno", category: "easy" },
+  { id: "relatives_choose_music", label: "I let my relatives choose", type: "yesno", showIf: { id: "no_music", equals: "no" }, category: "easy" },
+  { id: "desired_music_accompaniment", label: "I would like the following musical accompaniment:", type: "textarea", showIf: chooseMusic, category: "easy" },
+  { id: "choir_musicians_soloist", label: "I would like a choir, several musicians, or a soloist:", type: "textarea", showIf: chooseMusic, category: "technical" }
 ];
 
 export default function Music({ token }) {
   return (
     <QuestionPage
       pageId="music"
-      title="Accompagnement musical"
+      title="Musical Accompaniment"
       questions={questions}
       token={token}
     />

@@ -6,18 +6,18 @@ const chooseReception = [
 ];
 
 export const questions = [
-  { id: "photo_slideshow", label: "Je souhaite la projection d’un diaporama photos (photos à annexer à votre dossier A&G Funeral) :", type: "textarea" },
-  { id: "no_reception", label: "Je ne souhaite pas de réception après la cérémonie", type: "yesno" },
-  { id: "relatives_choose_reception", label: "Je laisse mes proches choisir", type: "yesno", showIf: { id: "no_reception", equals: "no" } },
-  { id: "recipe_or_favorite_treats", label: "Je transmets une recette qui me tient à coeur et/ou mes gourmandises préférées (recette à annexer) :", type: "textarea", showIf: chooseReception },
-  { id: "chosen_place", label: "Lieu choisi :", showIf: chooseReception }
+  { id: "photo_slideshow", label: "I would like a photo slideshow, with photos to attach to the A&G Funeral file:", type: "textarea", category: "technical" },
+  { id: "no_reception", label: "I do not want a reception after the ceremony", type: "yesno", category: "easy" },
+  { id: "relatives_choose_reception", label: "I let my relatives choose", type: "yesno", showIf: { id: "no_reception", equals: "no" }, category: "easy" },
+  { id: "recipe_or_favorite_treats", label: "I am sharing a recipe that matters to me and/or my favorite treats, with recipe to attach:", type: "textarea", showIf: chooseReception, category: "technical" },
+  { id: "chosen_place", label: "Chosen place:", showIf: chooseReception, category: "technical" }
 ];
 
 export default function SlideshowReception({ token }) {
   return (
     <QuestionPage
       pageId="slideshow-reception"
-      title="Diaporama | Réception | Collation après la cérémonie"
+      title="Slideshow | Reception | Post-Ceremony Refreshments"
       questions={questions}
       token={token}
     />

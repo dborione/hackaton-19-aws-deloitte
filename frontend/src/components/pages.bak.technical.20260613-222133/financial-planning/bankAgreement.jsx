@@ -1,0 +1,17 @@
+import QuestionPage from "../questionPage";
+
+export const questions = [
+  { id: "bank", label: "Bank:", category: "easy" },
+  { id: "agreement_reference", label: "Bank agreement reference:", category: "documents" }
+];
+
+export default function BankAgreement({ token }) {
+  return (
+    <QuestionPage
+      pageId="bank-agreement"
+      title="Bank Agreement"
+      questions={questions}
+      token={token}
+    />
+  );
+}

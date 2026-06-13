@@ -1,19 +1,19 @@
 import QuestionPage from "../questionPage";
 
 export const questions = [
-  { id: "family_story", label: "Mon histoire familiale :" },
-  { id: "professional_path", label: "Mon parcours professionnel :" },
-  { id: "honorary_distinctions", label: "Distinction(s) honorifique(s) :" },
-  { id: "passions_hobbies_interests", label: "Mes passions et loisirs, mes centres d’intérêts :" },
-  { id: "life_motto", label: "Ma devise dans la vie :" },
-  { id: "beautiful_memory", label: "Un beau souvenir, de bons moments :" }
+  { id: "family_story", label: "My family story:", category: "easy" },
+  { id: "professional_path", label: "My professional path:", category: "easy" },
+  { id: "honorary_distinctions", label: "Honorary distinction(s):", category: "technical" },
+  { id: "passions_hobbies_interests", label: "My passions, hobbies, and interests:", category: "easy" },
+  { id: "life_motto", label: "My motto in life:", category: "easy" },
+  { id: "beautiful_memory", label: "A beautiful memory or good moments:", category: "easy" }
 ];
 
 export default function LifeStory({ token }) {
   return (
     <QuestionPage
       pageId="life-story"
-      title="Parcours de vie | Personnalisation"
+      title="Life Story | Personalization"
       questions={questions}
       token={token}
     />

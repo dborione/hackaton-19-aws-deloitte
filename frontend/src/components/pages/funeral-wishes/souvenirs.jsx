@@ -1,21 +1,21 @@
 import QuestionPage from "../questionPage";
 
 export const questions = [
-  { id: "souvenir_card", label: "Carte (citation et photos éventuelles à annexer)", type: "yesno" },
-  { id: "candle", label: "Bougie", type: "yesno" },
-  { id: "memories_biography", label: "Mémoires / biographie", type: "yesno" },
-  { id: "bookmark", label: "Signet", type: "yesno" },
-  { id: "flower_seeds", label: "Graines de fleurs", type: "yesno" },
-  { id: "personalized_bottle", label: "Flacon personnalisé", type: "yesno" },
-  { id: "tea", label: "Tisane / Thé", type: "yesno" },
-  { id: "souvenir_other", label: "Autre :" }
+  { id: "souvenir_card", label: "Memorial card, with quote and possible photos to attach", type: "yesno", category: "technical" },
+  { id: "candle", label: "Candle", type: "yesno", category: "easy" },
+  { id: "memories_biography", label: "Memories / biography", type: "yesno", category: "technical" },
+  { id: "bookmark", label: "Bookmark", type: "yesno", category: "easy" },
+  { id: "flower_seeds", label: "Flower seeds", type: "yesno", category: "easy" },
+  { id: "personalized_bottle", label: "Personalized bottle", type: "yesno", category: "easy" },
+  { id: "tea", label: "Herbal tea / tea", type: "yesno", category: "easy" },
+  { id: "souvenir_other", label: "Other:", category: "easy" }
 ];
 
 export default function Souvenirs({ token }) {
   return (
     <QuestionPage
       pageId="souvenirs"
-      title="Souvenirs"
+      title="Keepsakes"
       questions={questions}
       token={token}
     />

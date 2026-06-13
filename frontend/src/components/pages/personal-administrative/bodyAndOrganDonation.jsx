@@ -1,17 +1,17 @@
 import QuestionPage from "../questionPage";
 
 export const questions = [
-  { id: "do_not_donate_body", label: "Je ne souhaite pas donner mon corps à la science" },
-  { id: "body_donated_to_university", label: "J’ai légué mon corps à l’Université :" },
-  { id: "body_donation_documents_location", label: "Les documents concernant ce don se trouvent :" },
-  { id: "organ_donation", label: "Don d’organe :" }
+  { id: "do_not_donate_body", label: "I do not wish to donate my body to science", category: "easy" },
+  { id: "body_donated_to_university", label: "I have donated my body to the following university:", category: "technical" },
+  { id: "body_donation_documents_location", label: "The documents related to this donation are located at:", category: "technical" },
+  { id: "organ_donation", label: "Organ donation:", category: "technical" }
 ];
 
 export default function BodyAndOrganDonation({ token }) {
   return (
     <QuestionPage
       pageId="body-and-organ-donation"
-      title="Don d’organe / de corps"
+      title="Organ and Body Donation"
       questions={questions}
       token={token}
     />

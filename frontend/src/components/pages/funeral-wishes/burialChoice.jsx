@@ -6,26 +6,26 @@ const showBurialDetails = [
 ];
 
 export const questions = [
-  { id: "let_relatives_choose", label: "Je laisse mes proches choisir", type: "yesno" },
-  { id: "wish_burial", label: "Je souhaite être inhumé(e) (enterrement)", type: "yesno", showIf: { id: "let_relatives_choose", equals: "no" } },
-  { id: "cemetery", label: "Cimetière :", showIf: showBurialDetails },
-  { id: "has_existing_concession", label: "Concession existante au nom de :", type: "yesno", showIf: showBurialDetails },
-  { id: "existing_concession_name", label: "Concession existante au nom de :", showIf: { id: "has_existing_concession", equals: "yes" } },
-  { id: "concession_number", label: "Concession n°", showIf: { id: "has_existing_concession", equals: "yes" } },
-  { id: "with_vault", label: "Avec caveau", type: "yesno", showIf: { id: "has_existing_concession", equals: "yes" } },
-  { id: "without_vault", label: "Sans caveau", type: "yesno", showIf: { id: "has_existing_concession", equals: "yes" } },
-  { id: "vault_opening_contact", label: "Personne de contact pour l’ouverture du caveau :", showIf: { id: "with_vault", equals: "yes" } },
-  { id: "plan_new_concession", label: "Prévoir l’achat d’une nouvelle concession :", type: "yesno", showIf: showBurialDetails },
-  { id: "free_ground", label: "Pleine terre gratuite : 5 ans pleine terre, non renouvelable", type: "yesno", showIf: { id: "plan_new_concession", equals: "yes" } },
-  { id: "paid_ground", label: "Pleine terre payante : 10 à 50 ans - selon la commune", type: "yesno", showIf: { id: "plan_new_concession", equals: "yes" } },
-  { id: "concession_with_vault", label: "Concession avec caveau", type: "yesno", showIf: { id: "plan_new_concession", equals: "yes" } }
+  { id: "let_relatives_choose", label: "I let my relatives choose", type: "yesno", category: "easy" },
+  { id: "wish_burial", label: "I wish to be buried", type: "yesno", showIf: { id: "let_relatives_choose", equals: "no" }, category: "easy" },
+  { id: "cemetery", label: "Cemetery:", showIf: showBurialDetails, category: "technical" },
+  { id: "has_existing_concession", label: "There is an existing concession", type: "yesno", showIf: showBurialDetails, category: "technical" },
+  { id: "existing_concession_name", label: "Existing concession in the name of:", showIf: { id: "has_existing_concession", equals: "yes" }, category: "technical" },
+  { id: "concession_number", label: "Concession number:", showIf: { id: "has_existing_concession", equals: "yes" }, category: "technical" },
+  { id: "with_vault", label: "With vault", type: "yesno", showIf: { id: "has_existing_concession", equals: "yes" }, category: "technical" },
+  { id: "without_vault", label: "Without vault", type: "yesno", showIf: { id: "has_existing_concession", equals: "yes" }, category: "technical" },
+  { id: "vault_opening_contact", label: "Contact person for opening the vault:", showIf: { id: "with_vault", equals: "yes" }, category: "technical" },
+  { id: "plan_new_concession", label: "Plan the purchase of a new concession", type: "yesno", showIf: showBurialDetails, category: "technical" },
+  { id: "free_ground", label: "Free ground burial: 5 years, non-renewable", type: "yesno", showIf: { id: "plan_new_concession", equals: "yes" }, category: "technical" },
+  { id: "paid_ground", label: "Paid ground burial: 10 to 50 years, depending on the municipality", type: "yesno", showIf: { id: "plan_new_concession", equals: "yes" }, category: "technical" },
+  { id: "concession_with_vault", label: "Concession with vault", type: "yesno", showIf: { id: "plan_new_concession", equals: "yes" }, category: "technical" }
 ];
 
 export default function BurialChoice({ token }) {
   return (
     <QuestionPage
       pageId="burial-choice"
-      title="Choix des funérailles | Mode de sépulture"
+      title="Funeral Choice | Burial Method"
       questions={questions}
       token={token}
     />

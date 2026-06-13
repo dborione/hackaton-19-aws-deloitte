@@ -6,6 +6,87 @@ import {
   normalizeQuestions
 } from "../utils/progress";
 
+const styles = {
+  page: {
+    textAlign: "left"
+  },
+
+  title: {
+    margin: "0 0 24px 0",
+    color: "#232f3e"
+  },
+
+  categoryBox: {
+    background: "#fff",
+    border: "1px solid #ddd",
+    borderRadius: 8,
+    padding: 20,
+    marginBottom: 24
+  },
+
+  categoryTitle: {
+    margin: "0 0 8px 0",
+    color: "#232f3e"
+  },
+
+  categoryHint: {
+    margin: "0 0 18px 0",
+    color: "#666",
+    fontSize: 14
+  },
+
+  questionRow: {
+    display: "grid",
+    gridTemplateColumns: "minmax(220px, 42%) 1fr",
+    gap: 18,
+    alignItems: "center",
+    borderBottom: "1px solid #eee",
+    padding: "14px 0"
+  },
+
+  label: {
+    fontWeight: "bold",
+    color: "#232f3e",
+    lineHeight: 1.4
+  },
+
+  input: {
+    width: "100%",
+    padding: 8,
+    border: "1px solid #ccc",
+    borderRadius: 4,
+    boxSizing: "border-box"
+  },
+
+  textarea: {
+    width: "100%",
+    padding: 8,
+    border: "1px solid #ccc",
+    borderRadius: 4,
+    resize: "vertical",
+    boxSizing: "border-box"
+  },
+
+  yesNoBox: {
+    display: "flex",
+    gap: 18,
+    justifyContent: "flex-start"
+  },
+
+  status: {
+    color: "#555",
+    fontWeight: "bold"
+  }
+};
+
+function getQuestionCategory(question) {
+  if (question.category === "technical" || question.category === "documents") {
+    return "technical";
+  }
+
+  return "easy";
+}
+
 export default function QuestionPage({
   pageId,
   title,
@@ -16,7 +97,12 @@ export default function QuestionPage({
   const [status, setStatus] = useState("");
 
   const allQuestions = useMemo(() => {
-    return normalizeQuestions(questions);
+    const normalized = normalizeQuestions(questions);
+
+    return normalized.map((question, index) => ({
+      ...question,
+      category: question.category || questions[index]?.category || "easy"
+    }));
   }, [questions]);
 
   useEffect(() => {
@@ -38,7 +124,7 @@ export default function QuestionPage({
         setAnswers(data.answers || {});
       } catch (err) {
         console.error(err);
-        setStatus("Erreur chargement");
+        setStatus("Loading error");
       }
     }
 
@@ -49,7 +135,7 @@ export default function QuestionPage({
 
   const saveAnswers = async (nextAnswers) => {
     try {
-      setStatus("Sauvegarde...");
+      setStatus("Saving...");
 
       const cleanedAnswers = cleanHiddenAnswers(allQuestions, nextAnswers);
 
@@ -74,10 +160,10 @@ export default function QuestionPage({
       }
 
       setAnswers(cleanedAnswers);
-      setStatus("Sauvegardé");
+      setStatus("Saved");
     } catch (err) {
       console.error(err);
-      setStatus("Erreur sauvegarde");
+      setStatus("Save error");
     }
   };
 
@@ -115,12 +201,7 @@ export default function QuestionPage({
         value={answers[question.id] || ""}
         onChange={(e) => handleTextChange(question.id, e.target.value)}
         onBlur={(e) => handleTextBlur(question.id, e.target.value)}
-        style={{
-          width: "100%",
-          padding: 8,
-          border: "1px solid #ccc",
-          borderRadius: 4
-        }}
+        style={styles.input}
       />
     );
   };
@@ -132,20 +213,14 @@ export default function QuestionPage({
         onChange={(e) => handleTextChange(question.id, e.target.value)}
         onBlur={(e) => handleTextBlur(question.id, e.target.value)}
         rows={4}
-        style={{
-          width: "100%",
-          padding: 8,
-          border: "1px solid #ccc",
-          borderRadius: 4,
-          resize: "vertical"
-        }}
+        style={styles.textarea}
       />
     );
   };
 
   const renderYesNoQuestion = (question) => {
     return (
-      <div style={{ display: "flex", gap: 16, justifyContent: "center" }}>
+      <div style={styles.yesNoBox}>
         <label>
           <input
             type="radio"
@@ -154,7 +229,7 @@ export default function QuestionPage({
             checked={answers[question.id] === "yes"}
             onChange={() => handleYesNoChange(question.id, "yes")}
           />
-          {" "}Oui
+          {" "}Yes
         </label>
 
         <label>
@@ -165,7 +240,7 @@ export default function QuestionPage({
             checked={answers[question.id] === "no"}
             onChange={() => handleYesNoChange(question.id, "no")}
           />
-          {" "}Non
+          {" "}No
         </label>
       </div>
     );
@@ -185,26 +260,59 @@ export default function QuestionPage({
 
   const renderQuestion = (question) => {
     return (
-      <div key={question.id} style={{ marginBottom: 16 }}>
-        <label style={{ display: "block", marginBottom: 6 }}>
+      <div key={question.id} style={styles.questionRow}>
+        <label style={styles.label}>
           {question.label}
         </label>
 
-        {renderInput(question)}
+        <div>
+          {renderInput(question)}
+        </div>
       </div>
     );
   };
 
   const visibleQuestions = getVisibleQuestions(allQuestions, answers);
 
+  const easyQuestions = visibleQuestions.filter(
+    (question) => getQuestionCategory(question) === "easy"
+  );
+
+  const technicalQuestions = visibleQuestions.filter(
+    (question) => getQuestionCategory(question) === "technical"
+  );
+
   return (
-    <div>
-      <h1>{title}</h1>
+    <div style={styles.page}>
+      <h1 style={styles.title}>{title}</h1>
 
-      <h2>Questions</h2>
-      {visibleQuestions.map(renderQuestion)}
+      <section style={styles.categoryBox}>
+        <h2 style={styles.categoryTitle}>Easy to answer</h2>
+        <p style={styles.categoryHint}>
+          These questions can usually be answered on the spot, based on personal preferences.
+        </p>
 
-      {status && <p>{status}</p>}
+        {easyQuestions.length === 0 ? (
+          <p>No easy questions visible yet.</p>
+        ) : (
+          easyQuestions.map(renderQuestion)
+        )}
+      </section>
+
+      <section style={styles.categoryBox}>
+        <h2 style={styles.categoryTitle}>Technical or harder questions</h2>
+        <p style={styles.categoryHint}>
+          These questions may require checking documents, understanding a technical funeral option, contacting someone, or doing a bit of research before answering.
+        </p>
+
+        {technicalQuestions.length === 0 ? (
+          <p>No technical or harder questions visible yet.</p>
+        ) : (
+          technicalQuestions.map(renderQuestion)
+        )}
+      </section>
+
+      {status && <p style={styles.status}>{status}</p>}
     </div>
   );
 }

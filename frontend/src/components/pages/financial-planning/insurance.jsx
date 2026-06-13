@@ -1,26 +1,26 @@
 import QuestionPage from "../questionPage";
 
 export const questions = [
-  { id: "insurances", label: "Assurances" },
-  { id: "has_funeral_insurance", label: "Je possède une assurance obsèques" },
-  { id: "funeral_insurance_company", label: "Compagnie :" },
-  { id: "funeral_insurance_policy_number", label: "N° de police :" },
-  { id: "funeral_insurance_broker_contact", label: "Contact (courtier) :" },
-  { id: "funeral_insurance_address", label: "Adresse :" },
-  { id: "wants_funeral_insurance", label: "Je souhaite souscrire à une assurance obsèques" },
-  { id: "has_life_insurance", label: "Je possède une assurance vie" },
-  { id: "life_insurance_company", label: "Compagnie :" },
-  { id: "life_insurance_policy_number", label: "N° de police :" },
-  { id: "life_insurance_broker_contact", label: "Contact (courtier) :" },
-  { id: "life_insurance_address", label: "Adresse :" },
-  { id: "no_insurance", label: "Je ne possède pas d’assurance" }
+  { id: "insurances", label: "Insurance notes", category: "easy" },
+  { id: "has_funeral_insurance", label: "I have funeral insurance", category: "easy" },
+  { id: "funeral_insurance_company", label: "Funeral insurance company:", category: "technical" },
+  { id: "funeral_insurance_policy_number", label: "Funeral insurance policy number:", category: "technical" },
+  { id: "funeral_insurance_broker_contact", label: "Funeral insurance broker/contact:", category: "technical" },
+  { id: "funeral_insurance_address", label: "Funeral insurance address:", category: "technical" },
+  { id: "wants_funeral_insurance", label: "I would like to take out funeral insurance", category: "easy" },
+  { id: "has_life_insurance", label: "I have life insurance", category: "easy" },
+  { id: "life_insurance_company", label: "Life insurance company:", category: "technical" },
+  { id: "life_insurance_policy_number", label: "Life insurance policy number:", category: "technical" },
+  { id: "life_insurance_broker_contact", label: "Life insurance broker/contact:", category: "technical" },
+  { id: "life_insurance_address", label: "Life insurance address:", category: "technical" },
+  { id: "no_insurance", label: "I do not have any insurance", category: "easy" }
 ];
 
 export default function Insurance({ token }) {
   return (
     <QuestionPage
       pageId="insurance"
-      title="Assurances"
+      title="Insurance"
       questions={questions}
       token={token}
     />
