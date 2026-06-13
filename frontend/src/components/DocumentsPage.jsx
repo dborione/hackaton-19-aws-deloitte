@@ -19,6 +19,9 @@ const IDENTITY_FIELD_MAP = {
     "last_name": "birth_name",
     "nom de naissance": "birth_name",
     "name": "birth_name",  // Belgian ID: "Name / Name" → birth_name
+    "Nom / Name": "birth_name",  // Belgian ID: bilingual
+    "Naam / Name": "birth_name",  // Belgian ID: bilingual
+
     // First name variants
     "first name": "first_names",
     "given name": "first_names",
@@ -29,6 +32,11 @@ const IDENTITY_FIELD_MAP = {
     "prénoms": "first_names",
     "prenoms": "first_names",
     "vornamen": "first_names",  // German for given names
+    "given names / vornamen": "first_names",  // bilingual
+    "Given names": "first_names",  // bilingual
+    "Prénoms / Given names": "first_names",  // bilingual
+    "Voornamen / Given names": "first_names",  // bilingual
+    
     // Birth date variants
     "date of birth": "birth_date",
     "birth date": "birth_date",
@@ -37,11 +45,15 @@ const IDENTITY_FIELD_MAP = {
     "dob": "birth_date",
     "birthdate": "birth_date",
     "date_of_birth": "birth_date",
+    "Date or birth": "birth_date",  // Belgian ID: bilingual
+
     // Birth place variants
     "place of birth": "birth_place",
     "lieu de naissance": "birth_place",
     "birthplace": "birth_place",
     "birth place": "birth_place",
+    "Lieu et date de naissance / Place and date of birth": "birth_place",  // Belgian ID
+
     // National register / Card number variants
     "national register": "national_register_number",
     "nationalregisternr": "national_register_number",
@@ -55,6 +67,9 @@ const IDENTITY_FIELD_MAP = {
     "ausweisnr": "national_register_number",
     "n° carte": "national_register_number",
     "numéro de carte": "national_register_number",
+    "Rijksregisternr. / National Register N°": "national_register_number",  // Belgian ID
+    "Nationalregisternr. / National Register N°": "national_register_number",  // Belgian ID
+
     // Full name (for later reassembly if needed)
     "full name": "cover_full_name",
     "nom prénom": "cover_full_name",
