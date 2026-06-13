@@ -32,7 +32,8 @@ export default function UploadDocument({ token }) {
     setError("");
 
     try {
-      const body = await file.arrayBuffer();
+      const arrayBuffer = await file.arrayBuffer();
+      const body = new Uint8Array(arrayBuffer);
 
       const s3 = new S3Client({
         region: config.region,
@@ -46,7 +47,7 @@ export default function UploadDocument({ token }) {
       await s3.send(new PutObjectCommand({
         Bucket:      config.documentsBucket,
         Key:         `uploads/${Date.now()}_${file.name}`,
-        Body:        new Blob([body], { type: file.type }),
+        Body:        body,
         ContentType: file.type
       }));
 

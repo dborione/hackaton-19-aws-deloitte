@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { CognitoUserPool, CognitoUser, AuthenticationDetails } from "amazon-cognito-identity-js";
 import Login from "./components/Login";
 import Register from "./components/Register";
+import Dashboard from "./components/Dashboard";
 import DocumentList from "./components/DocumentList";
 import UploadDocument from "./components/UploadDocument";
 import config from "./config";
@@ -91,16 +92,5 @@ export default function App() {
     return <Login onLogin={handleLogin} onGoRegister={() => setScreen("register")} />;
   }
 
-  return (
-    <>
-      <nav style={styles.nav}>
-        <span style={{ fontSize: 20, fontWeight: "bold" }}>Franchise App</span>
-        <button style={styles.btn} onClick={handleLogout}>Déconnexion</button>
-      </nav>
-      <main style={styles.main}>
-        <UploadDocument token={token} />
-        <DocumentList token={token} />
-      </main>
-    </>
-  );
+  return <Dashboard token={token} onLogout={handleLogout} />;
 }
