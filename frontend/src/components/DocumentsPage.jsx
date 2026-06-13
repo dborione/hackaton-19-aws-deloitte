@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { fromCognitoIdentityPool } from "@aws-sdk/credential-provider-cognito-identity";
 import config from "../config";
@@ -106,12 +106,12 @@ const DOCUMENT_CATEGORIES = [
     {
         id: "identity",
         icon: "🪪",
-        title: "Pièce d'identité",
+        title: "Identity Document",
         color: "#4f46e5",
         gradient: "linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)",
-        description: "Carte nationale d'identité, passeport ou permis de conduire.",
-        examples: ["Carte d'identité", "Passeport", "Permis de conduire"],
-        acceptHint: "Photo ou PDF de votre pièce d'identité",
+        description: "National ID card, passport, or driver's license.",
+        examples: ["ID Card", "Passport", "Driver's License"],
+        acceptHint: "Photo or PDF of your identity document",
         pageId: "identity",
         questions: identityQuestions,
         fieldMap: IDENTITY_FIELD_MAP,
@@ -119,12 +119,12 @@ const DOCUMENT_CATEGORIES = [
     {
         id: "home",
         icon: "🏠",
-        title: "Justificatif de domicile",
+        title: "Proof of Address",
         color: "#059669",
         gradient: "linear-gradient(135deg, #059669 0%, #0d9488 100%)",
-        description: "Facture d'eau, électricité ou gaz de moins de 3 mois.",
-        examples: ["Facture d'eau", "Facture EDF", "Relevé bancaire"],
-        acceptHint: "Photo ou PDF du justificatif",
+        description: "Water, electricity, or gas bill less than 3 months old.",
+        examples: ["Water Bill", "Electricity Bill", "Bank Statement"],
+        acceptHint: "Photo or PDF of proof of address",
         pageId: "current-home",
         questions: currentHomeQuestions,
         fieldMap: CURRENT_HOME_FIELD_MAP,
@@ -132,12 +132,12 @@ const DOCUMENT_CATEGORIES = [
     {
         id: "insurance",
         icon: "📋",
-        title: "Assurance",
+        title: "Insurance",
         color: "#d97706",
         gradient: "linear-gradient(135deg, #d97706 0%, #ea580c 100%)",
-        description: "Police d'assurance vie ou funéraire.",
-        examples: ["Contrat d'assurance vie", "Assurance obsèques"],
-        acceptHint: "Photo ou PDF du contrat d'assurance",
+        description: "Life insurance or funeral insurance policy.",
+        examples: ["Life Insurance", "Funeral Insurance"],
+        acceptHint: "Photo or PDF of insurance contract",
         pageId: "insurance",
         questions: insuranceQuestions,
         fieldMap: INSURANCE_FIELD_MAP,
@@ -145,12 +145,12 @@ const DOCUMENT_CATEGORIES = [
     {
         id: "other",
         icon: "📄",
-        title: "Autre document",
+        title: "Other Document",
         color: "#6b7280",
         gradient: "linear-gradient(135deg, #6b7280 0%, #4b5563 100%)",
-        description: "Tout autre document pertinent pour votre dossier.",
-        examples: ["Testament", "Contrat", "Diplôme"],
-        acceptHint: "Photo ou PDF",
+        description: "Any other document relevant to your file.",
+        examples: ["Will", "Contract", "Certificate"],
+        acceptHint: "Photo or PDF",
         pageId: null,        // No autofill for "other"
         questions: [],
         fieldMap: {},
@@ -361,27 +361,27 @@ function UploadZone({ category, token, onSuccess }) {
                             style={{ ...styles.uploadBtn, background: category.color }}
                             onClick={handleUpload}
                         >
-                            Analyser &amp; remplir automatiquement
+                            Analyze &amp; Auto-Fill
                         </button>
                     )}
 
                     {phase === "error" && (
                         <div style={{ ...styles.statusBox, background: "#fef2f2", color: "#b91c1c" }}>
-                            ❌ Erreur : {errorMsg}
+                            ❌ Error: {errorMsg}
                         </div>
                     )}
                 </>
             ) : phase === "uploading" ? (
                 <div style={{ textAlign: "center", padding: 40 }}>
                     <div style={{ fontSize: 40 }}>📤</div>
-                    <p style={{ fontWeight: "bold", marginTop: 12 }}>Upload en cours...</p>
-                    <p style={{ color: "#888", fontSize: 13 }}>Envoi de votre document vers le cloud</p>
+                    <p style={{ fontWeight: "bold", marginTop: 12 }}>Upload in progress...</p>
+                    <p style={{ color: "#888", fontSize: 13 }}>Sending your document to the cloud</p>
                 </div>
             ) : phase === "processing" ? (
                 <div style={{ textAlign: "center", padding: 40 }}>
                     <div style={{ fontSize: 40, animation: "pulse 1.5s infinite" }}>🔍</div>
-                    <p style={{ fontWeight: "bold", marginTop: 12 }}>Analyse en cours…</p>
-                    <p style={{ color: "#888", fontSize: 13 }}>Amazon Textract extrait les informations de votre document.<br />Cela peut prendre quelques secondes.</p>
+                    <p style={{ fontWeight: "bold", marginTop: 12 }}>Analysis in progress…</p>
+                    <p style={{ color: "#888", fontSize: 13 }}>Amazon Textract extracts information from your document.<br />This may take a few seconds.</p>
                     <div style={{ marginTop: 16, height: 4, borderRadius: 4, background: "#e5e7eb", overflow: "hidden" }}>
                         <div style={{ height: "100%", width: "60%", background: category.color, borderRadius: 4, animation: "loading-bar 2s ease-in-out infinite" }} />
                     </div>
@@ -391,13 +391,13 @@ function UploadZone({ category, token, onSuccess }) {
                 <div>
                     <div style={{ textAlign: "center", marginBottom: 20 }}>
                         <span style={{ fontSize: 40 }}>✅</span>
-                        <p style={{ fontWeight: "bold", fontSize: 16, margin: "8px 0 0" }}>Document analysé avec succès !</p>
+                        <p style={{ fontWeight: "bold", fontSize: 16, margin: "8px 0 0" }}>Document analyzed successfully!</p>
                     </div>
 
                     {autofilled && Object.keys(autofilled).length > 0 ? (
                         <div style={styles.autofillBox}>
                             <p style={{ fontWeight: "bold", color: "#166534", marginBottom: 10, fontSize: 14 }}>
-                                🎉 Champs remplis automatiquement dans «&nbsp;{category.title}&nbsp;» :
+                                🎉 Fields auto-filled in "&nbsp;{category.title}&nbsp;":
                             </p>
                             {Object.entries(autofilled).map(([qId, val]) => (
                                 <div key={qId} style={styles.fieldRow}>
@@ -406,17 +406,17 @@ function UploadZone({ category, token, onSuccess }) {
                                 </div>
                             ))}
                             <p style={{ fontSize: 12, color: "#166534", marginTop: 8, opacity: 0.7 }}>
-                                Ces informations ont été sauvegardées dans votre dossier. Vous pouvez les modifier depuis le tableau de bord.
+                                This information has been saved to your file. You can edit it from the dashboard.
                             </p>
                         </div>
                     ) : (
                         <div style={{ ...styles.statusBox, background: "#fffbeb", color: "#92400e" }}>
-                            ℹ️ Document archivé. Aucun champ n'a pu être extrait automatiquement. Vous pouvez remplir manuellement depuis le tableau de bord.
+                            ℹ️ Document archived. No fields could be extracted automatically. You can fill them manually from the dashboard.
                         </div>
                     )}
 
                     <button onClick={reset} style={{ marginTop: 16, padding: "8px 20px", borderRadius: 6, border: "1px solid #ddd", background: "#fff", cursor: "pointer" }}>
-                        Uploader un autre document
+                        Upload Another Document
                     </button>
                 </div>
             )}
@@ -424,9 +424,119 @@ function UploadZone({ category, token, onSuccess }) {
     );
 }
 
-export default function DocumentsPage({ token }) {
+// Constants for document categorization (matching Dashboard structure)
+const PROCESSED_CATEGORIES = {
+  "personal": { name: "Personal & Administrative", color: "#4CAF50", icon: "👤" },
+  "funeral": { name: "Funeral Wishes", color: "#2196F3", icon: "⚱️" },
+  "financial": { name: "Financial Planning", color: "#FF9800", icon: "💰" }
+};
+
+// Utility functions for processed documents
+function categorizeData(forms) {
+  const categorized = {
+    personal: {},
+    funeral: {},
+    financial: {}
+  };
+
+  if (!forms) return categorized;
+
+  Object.entries(forms).forEach(([key, value]) => {
+    const lowerKey = key.toLowerCase();
+    
+    if (lowerKey.includes("name") || lowerKey.includes("identity") || lowerKey.includes("birth") || 
+        lowerKey.includes("address") || lowerKey.includes("contact") || lowerKey.includes("donation")) {
+      categorized.personal[key] = value;
+    } else if (lowerKey.includes("burial") || lowerKey.includes("cremation") || lowerKey.includes("ceremony") ||
+               lowerKey.includes("coffin") || lowerKey.includes("flower") || lowerKey.includes("music") ||
+               lowerKey.includes("viewing") || lowerKey.includes("funeral") || lowerKey.includes("wishes")) {
+      categorized.funeral[key] = value;
+    } else if (lowerKey.includes("bank") || lowerKey.includes("insurance") || lowerKey.includes("payment") ||
+               lowerKey.includes("financing")) {
+      categorized.financial[key] = value;
+    }
+  });
+
+  return categorized;
+}
+
+function getDocumentStats(doc) {
+  const formCount = doc.forms ? Object.keys(doc.forms).length : 0;
+  const tableCount = doc.tables ? doc.tables.length : 0;
+  return { formCount, tableCount };
+}
+
+export default function DocumentsPage({ token, onBack }) {
+    const [tab, setTab] = useState("upload"); // "upload" or "processed"
     const [selected, setSelected] = useState(null);
     const [uploadCounts, setUploadCounts] = useState({});
+    
+    // For processed documents
+    const [documents, setDocuments] = useState([]);
+    const [loading, setLoading] = useState(tab === "processed");
+    const [selectedDetail, setSelectedDetail] = useState(null);
+
+    const ALLOWED_API_ORIGIN = new URL(config.apiUrl).origin;
+
+    // Fetch processed documents when tab changes to processed
+    useEffect(() => {
+        if (tab === "processed") {
+            fetchDocuments();
+        }
+    }, [tab]);
+
+    const fetchDocuments = async () => {
+        setLoading(true);
+        try {
+            const res = await fetch(`${config.apiUrl}/data/documents`, {
+                headers: { Authorization: token }
+            });
+            const data = await res.json();
+            setDocuments(data.documents || []);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const fetchDetail = async (id) => {
+        if (!/^[a-zA-Z0-9_-]+$/.test(String(id))) {
+            console.error("Invalid document id");
+            return;
+        }
+        const url = new URL(`/data/documents/${encodeURIComponent(id)}`, ALLOWED_API_ORIGIN);
+        if (url.origin !== ALLOWED_API_ORIGIN) {
+            console.error("URL origin mismatch");
+            return;
+        }
+        const res = await fetch(url.toString(), {
+            headers: { Authorization: token }
+        });
+        const data = await res.json();
+        setSelectedDetail(data);
+    };
+
+    const renderCategorySection = (title, icon, color, data) => {
+        const entries = Object.entries(data);
+        if (entries.length === 0) return null;
+
+        return (
+            <div key={title} style={{ marginTop: 20, border: "1px solid #ddd", borderRadius: 6, padding: 16, background: "#fafafa" }}>
+                <div style={{ fontWeight: "bold", fontSize: 14, marginBottom: 12, color: "#232f3e", borderBottom: `2px solid ${color}`, paddingBottom: 8, paddingLeft: 12, display: "flex", alignItems: "center", gap: 8 }}>
+                    <span>{icon}</span>
+                    <span>{title}</span>
+                    <span style={{ marginLeft: "auto", background: color, color: "#fff", borderRadius: 12, padding: "2px 10px", fontSize: 11, fontWeight: "bold" }}>
+                        {entries.length}
+                    </span>
+                </div>
+                {entries.map(([k, v]) => (
+                    <div key={k} style={{ display: "grid", gridTemplateColumns: "200px 1fr", gap: 12, marginBottom: 8, fontSize: 13, padding: "8px 12px", background: "#f9f9f9", borderRadius: 4 }}>
+                        <span style={{ fontWeight: "bold", color: "#232f3e" }}>{k}</span>
+                        <span style={{ color: "#333" }}>{v || <em style={{ color: "#aaa" }}>empty</em>}</span>
+                    </div>
+                ))}
+            </div>
+        );
+    };
 
     const handleSuccess = (catId) => {
         setUploadCounts(prev => ({ ...prev, [catId]: (prev[catId] || 0) + 1 }));
@@ -443,14 +553,57 @@ export default function DocumentsPage({ token }) {
       `}</style>
 
             <div style={styles.header}>
-                <h1 style={styles.h1}>Documents</h1>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+                    <h1 style={styles.h1}>📄 Documents</h1>
+                    {onBack && (
+                        <button onClick={onBack} style={{ background: "transparent", color: "#555", border: "1px solid #ddd", padding: "8px 14px", borderRadius: 4, cursor: "pointer" }}>
+                            ← Back
+                        </button>
+                    )}
+                </div>
                 <p style={styles.subtitle}>
-                    Uploadez vos documents pour que les informations soient automatiquement
-                    extraites et importées dans votre dossier.
+                    Upload documents to extract information automatically or view processed documents.
                 </p>
             </div>
 
-            {!selected ? (
+            {/* TAB NAVIGATION */}
+            <div style={{ display: "flex", gap: 12, marginBottom: 24, borderBottom: "2px solid #e5e7eb" }}>
+                <button
+                    onClick={() => setTab("upload")}
+                    style={{
+                        padding: "12px 16px",
+                        background: tab === "upload" ? "#232f3e" : "transparent",
+                        color: tab === "upload" ? "#fff" : "#555",
+                        border: "none",
+                        cursor: "pointer",
+                        fontSize: 14,
+                        fontWeight: tab === "upload" ? "bold" : "normal",
+                        borderBottom: tab === "upload" ? "3px solid #ff9900" : "none",
+                        transition: "all .2s"
+                    }}
+                >
+                    📤 Upload Documents
+                </button>
+                <button
+                    onClick={() => setTab("processed")}
+                    style={{
+                        padding: "12px 16px",
+                        background: tab === "processed" ? "#232f3e" : "transparent",
+                        color: tab === "processed" ? "#fff" : "#555",
+                        border: "none",
+                        cursor: "pointer",
+                        fontSize: 14,
+                        fontWeight: tab === "processed" ? "bold" : "normal",
+                        borderBottom: tab === "processed" ? "3px solid #ff9900" : "none",
+                        transition: "all .2s"
+                    }}
+                >
+                    📋 Processed Documents ({documents.length})
+                </button>
+            </div>
+
+            {/* UPLOAD TAB */}
+            {tab === "upload" && !selected && (
                 <>
                     <div style={styles.grid}>
                         {DOCUMENT_CATEGORIES.map(cat => (
@@ -464,19 +617,21 @@ export default function DocumentsPage({ token }) {
                     </div>
 
                     <div style={{ background: "#f8fafc", borderRadius: 12, padding: 20, border: "1px solid #e2e8f0" }}>
-                        <h3 style={{ margin: "0 0 8px", fontSize: 15, color: "#374151" }}>💡 Comment ça marche ?</h3>
+                        <h3 style={{ margin: "0 0 8px", fontSize: 15, color: "#374151" }}>💡 How does it work?</h3>
                         <ol style={{ margin: 0, paddingLeft: 20, color: "#6b7280", fontSize: 14, lineHeight: 1.7 }}>
-                            <li>Choisissez la catégorie correspondant à votre document.</li>
-                            <li>Uploadez la photo ou le PDF (carte d'identité, justificatif, etc.).</li>
-                            <li>Amazon Textract analyse le document et en extrait les informations.</li>
-                            <li>Les données sont automatiquement importées dans votre dossier.</li>
+                            <li>Choose the category matching your document.</li>
+                            <li>Upload the photo or PDF (ID card, proof of address, etc.).</li>
+                            <li>Data is automatically imported into your file.</li>
                         </ol>
                     </div>
                 </>
-            ) : (
+            )}
+
+            {/* UPLOAD TAB - WITH SELECTED CATEGORY */}
+            {tab === "upload" && selected && (
                 <>
                     <button style={styles.backBtn} onClick={() => setSelected(null)}>
-                        ← Retour aux catégories
+                        ← Back to Categories
                     </button>
 
                     <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 24 }}>
@@ -495,6 +650,109 @@ export default function DocumentsPage({ token }) {
                         onSuccess={handleSuccess}
                     />
                 </>
+            )}
+
+            {/* PROCESSED TAB */}
+            {tab === "processed" && (
+                <div>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+                        <h2 style={{ fontSize: 18, fontWeight: "bold", margin: 0, color: "#232f3e" }}>Processed Documents</h2>
+                        <button style={{ background: "#232f3e", color: "#fff", border: "none", padding: "6px 12px", borderRadius: 4, cursor: "pointer", fontSize: 12 }} onClick={fetchDocuments}>
+                            Refresh
+                        </button>
+                    </div>
+
+                    {loading ? (
+                        <p style={{ textAlign: "center", color: "#999", padding: 32 }}>Loading...</p>
+                    ) : documents.length === 0 ? (
+                        <p style={{ textAlign: "center", color: "#999", padding: 32 }}>No processed documents yet.</p>
+                    ) : (
+                        <div>
+                            {documents.map(doc => {
+                                const stats = getDocumentStats(doc);
+                                return (
+                                    <div key={doc.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: 12, background: "#f9f9f9", borderRadius: 4, marginBottom: 8 }}>
+                                        <div>
+                                            <div style={{ fontWeight: "bold", color: "#232f3e", marginBottom: 4 }}>{doc.file_key}</div>
+                                            <div style={{ fontSize: 12, color: "#666" }}>
+                                                {new Date(doc.processed_at).toLocaleString("en-US")} • 
+                                                {stats.formCount > 0 && ` ${stats.formCount} form field${stats.formCount !== 1 ? "s" : ""}`}
+                                                {stats.tableCount > 0 && ` • ${stats.tableCount} table${stats.tableCount !== 1 ? "s" : ""}`}
+                                            </div>
+                                        </div>
+                                        <button style={{ background: "#232f3e", color: "#fff", border: "none", padding: "6px 12px", borderRadius: 4, cursor: "pointer", fontSize: 12 }} onClick={() => fetchDetail(doc.id)}>
+                                            View Details
+                                        </button>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    )}
+
+                    {/* DETAIL MODAL */}
+                    {selectedDetail && (
+                        <div style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(0,0,0,0.5)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 100 }} onClick={() => setSelectedDetail(null)}>
+                            <div style={{ background: "#fff", borderRadius: 8, padding: 32, maxWidth: 900, width: "95%", maxHeight: "90vh", overflow: "auto" }} onClick={e => e.stopPropagation()}>
+                                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 20 }}>
+                                    <div>
+                                        <h3 style={{ margin: "0 0 4px 0", fontSize: 20, color: "#232f3e" }}>{selectedDetail.file_key}</h3>
+                                        <small style={{ color: "#666" }}>Processed on {new Date(selectedDetail.processed_at).toLocaleString("en-US")}</small>
+                                    </div>
+                                    <button style={{ background: "#555", color: "#fff", border: "none", padding: "4px 8px", borderRadius: 3, cursor: "pointer", fontSize: 11 }} onClick={() => setSelectedDetail(null)}>
+                                        ✕ Close
+                                    </button>
+                                </div>
+
+                                {selectedDetail.forms && Object.keys(selectedDetail.forms).length > 0 && (
+                                    <div>
+                                        <p style={{ fontWeight: "bold", fontSize: 14, marginTop: 20, marginBottom: 12, color: "#fff", background: "#4CAF50", padding: "8px 12px", borderRadius: 4, display: "flex", alignItems: "center", gap: 8 }}>
+                                            👤 Extracted Data by Category
+                                        </p>
+                                        {(() => {
+                                            const categorized = categorizeData(selectedDetail.forms);
+                                            return (
+                                                <div>
+                                                    {renderCategorySection(PROCESSED_CATEGORIES.personal.name, PROCESSED_CATEGORIES.personal.icon, PROCESSED_CATEGORIES.personal.color, categorized.personal)}
+                                                    {renderCategorySection(PROCESSED_CATEGORIES.funeral.name, PROCESSED_CATEGORIES.funeral.icon, PROCESSED_CATEGORIES.funeral.color, categorized.funeral)}
+                                                    {renderCategorySection(PROCESSED_CATEGORIES.financial.name, PROCESSED_CATEGORIES.financial.icon, PROCESSED_CATEGORIES.financial.color, categorized.financial)}
+                                                </div>
+                                            );
+                                        })()}
+                                    </div>
+                                )}
+
+                                {selectedDetail.tables && selectedDetail.tables.length > 0 && (
+                                    <>
+                                        <p style={{ fontWeight: "bold", fontSize: 14, marginTop: 20, marginBottom: 12, color: "#fff", background: "#2196F3", padding: "8px 12px", borderRadius: 4, display: "flex", alignItems: "center", gap: 8 }}>
+                                            📊 Extracted Tables
+                                        </p>
+                                        {selectedDetail.tables.map((tbl, i) => (
+                                            <div key={i} style={{ overflowX: "auto", marginTop: 8, marginBottom: 16 }}>
+                                                <table style={{ borderCollapse: "collapse", fontSize: 12, width: "100%" }}>
+                                                    <thead>
+                                                        <tr>{tbl[0]?.map((h, j) => <th key={j} style={{ background: "#232f3e", color: "#fff", padding: "8px 10px", textAlign: "left" }}>{h}</th>)}</tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {tbl.slice(1).map((row, r) => (
+                                                            <tr key={r}>{row.map((cell, c) => <td key={c} style={{ border: "1px solid #ddd", padding: "6px 10px" }}>{cell}</td>)}</tr>
+                                                        ))}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        ))}
+                                    </>
+                                )}
+
+                                <p style={{ fontWeight: "bold", fontSize: 14, marginTop: 20, marginBottom: 12, color: "#fff", background: "#FF9800", padding: "8px 12px", borderRadius: 4, display: "flex", alignItems: "center", gap: 8 }}>
+                                    📝 Raw Text Content
+                                </p>
+                                <pre style={{ background: "#f0f2f5", padding: 12, borderRadius: 4, fontSize: 11, whiteSpace: "pre-wrap", marginTop: 8 }}>
+                                    {selectedDetail.raw_text}
+                                </pre>
+                            </div>
+                        </div>
+                    )}
+                </div>
             )}
         </div>
     );
