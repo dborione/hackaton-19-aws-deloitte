@@ -235,8 +235,8 @@ async function createInvitation(event) {
     "";
 
   const shareLink = origin
-    ? `${origin}/shared/${inviteToken}`
-    : `/shared/${inviteToken}`;
+    ? `${origin}/?shareToken=${inviteToken}`
+    : `/?shareToken=${inviteToken}`;
 
   return response(200, {
     invitationId,
