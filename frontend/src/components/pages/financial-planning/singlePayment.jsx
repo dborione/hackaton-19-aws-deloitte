@@ -1,6 +1,6 @@
 import QuestionPage from "../questionPage";
 
-const questions = [
+export const questions = [
   { id: "single_payment", label: "Paiement en prime unique (sous conditions)" },
   { id: "single_payment_amount_date", label: "Montant de effectué le" }
 ];

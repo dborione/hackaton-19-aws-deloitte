@@ -1,6 +1,6 @@
 import QuestionPage from "../questionPage";
 
-const questions = [
+export const questions = [
   { id: "ag_funeral_take_care", label: "Je souhaite qu’A&G Funeral prenne soin de moi :", type: "yesno" },
   { id: "presentation_care", label: "Soins de présentation :", type: "yesno", showIf: { id: "ag_funeral_take_care", equals: "yes" } },
   { id: "conservation_care", label: "Soins de conservation", type: "yesno", showIf: { id: "ag_funeral_take_care", equals: "yes" } },

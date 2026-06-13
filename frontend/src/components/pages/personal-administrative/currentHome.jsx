@@ -1,6 +1,6 @@
 import QuestionPage from "../questionPage";
 
-const questions = [
+export const questions = [
   { id: "address", label: "Adresse :" },
   { id: "postal_code", label: "Code Postal :" },
   { id: "locality", label: "Localité :" },

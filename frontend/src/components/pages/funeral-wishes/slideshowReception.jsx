@@ -5,7 +5,7 @@ const chooseReception = [
   { id: "relatives_choose_reception", equals: "no" }
 ];
 
-const questions = [
+export const questions = [
   { id: "photo_slideshow", label: "Je souhaite la projection d’un diaporama photos (photos à annexer à votre dossier A&G Funeral) :", type: "textarea" },
   { id: "no_reception", label: "Je ne souhaite pas de réception après la cérémonie", type: "yesno" },
   { id: "relatives_choose_reception", label: "Je laisse mes proches choisir", type: "yesno", showIf: { id: "no_reception", equals: "no" } },

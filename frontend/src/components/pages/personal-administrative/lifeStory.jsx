@@ -1,6 +1,6 @@
 import QuestionPage from "../questionPage";
 
-const questions = [
+export const questions = [
   { id: "family_story", label: "Mon histoire familiale :" },
   { id: "professional_path", label: "Mon parcours professionnel :" },
   { id: "honorary_distinctions", label: "Distinction(s) honorifique(s) :" },

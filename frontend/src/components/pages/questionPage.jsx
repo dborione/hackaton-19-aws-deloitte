@@ -1,5 +1,10 @@
 import React, { useEffect, useMemo, useState } from "react";
 import config from "../../config";
+import {
+  cleanHiddenAnswers,
+  getVisibleQuestions,
+  normalizeQuestions
+} from "../utils/progress";
 
 export default function QuestionPage({
   pageId,
@@ -11,38 +16,8 @@ export default function QuestionPage({
   const [status, setStatus] = useState("");
 
   const allQuestions = useMemo(() => {
-    return questions.map((question) => ({
-      id: question.id,
-      label: question.label,
-      type: question.type || "text",
-      showIf: question.showIf || null
-    }));
+    return normalizeQuestions(questions);
   }, [questions]);
-
-  const getVisibleQuestions = (currentAnswers) => {
-    return allQuestions.filter((question) => {
-      if (!question.showIf) {
-        return true;
-      }
-
-      return currentAnswers[question.showIf.id] === question.showIf.equals;
-    });
-  };
-
-  const cleanHiddenAnswers = (currentAnswers) => {
-    const visibleQuestions = getVisibleQuestions(currentAnswers);
-    const visibleIds = new Set(visibleQuestions.map((question) => question.id));
-
-    const cleaned = {};
-
-    for (const [key, value] of Object.entries(currentAnswers)) {
-      if (visibleIds.has(key)) {
-        cleaned[key] = value;
-      }
-    }
-
-    return cleaned;
-  };
 
   useEffect(() => {
     async function loadAnswers() {
@@ -76,7 +51,7 @@ export default function QuestionPage({
     try {
       setStatus("Sauvegarde...");
 
-      const cleanedAnswers = cleanHiddenAnswers(nextAnswers);
+      const cleanedAnswers = cleanHiddenAnswers(allQuestions, nextAnswers);
 
       const payload = {
         pageId,
@@ -124,7 +99,7 @@ export default function QuestionPage({
   };
 
   const handleYesNoChange = (questionId, value) => {
-    const nextAnswers = cleanHiddenAnswers({
+    const nextAnswers = cleanHiddenAnswers(allQuestions, {
       ...answers,
       [questionId]: value
     });
@@ -145,6 +120,24 @@ export default function QuestionPage({
           padding: 8,
           border: "1px solid #ccc",
           borderRadius: 4
+        }}
+      />
+    );
+  };
+
+  const renderTextareaQuestion = (question) => {
+    return (
+      <textarea
+        value={answers[question.id] || ""}
+        onChange={(e) => handleTextChange(question.id, e.target.value)}
+        onBlur={(e) => handleTextBlur(question.id, e.target.value)}
+        rows={4}
+        style={{
+          width: "100%",
+          padding: 8,
+          border: "1px solid #ccc",
+          borderRadius: 4,
+          resize: "vertical"
         }}
       />
     );
@@ -178,6 +171,18 @@ export default function QuestionPage({
     );
   };
 
+  const renderInput = (question) => {
+    if (question.type === "yesno") {
+      return renderYesNoQuestion(question);
+    }
+
+    if (question.type === "textarea") {
+      return renderTextareaQuestion(question);
+    }
+
+    return renderTextQuestion(question);
+  };
+
   const renderQuestion = (question) => {
     return (
       <div key={question.id} style={{ marginBottom: 16 }}>
@@ -185,14 +190,12 @@ export default function QuestionPage({
           {question.label}
         </label>
 
-        {question.type === "yesno"
-          ? renderYesNoQuestion(question)
-          : renderTextQuestion(question)}
+        {renderInput(question)}
       </div>
     );
   };
 
-  const visibleQuestions = getVisibleQuestions(answers);
+  const visibleQuestions = getVisibleQuestions(allQuestions, answers);
 
   return (
     <div>

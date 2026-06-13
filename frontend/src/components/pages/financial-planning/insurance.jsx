@@ -1,6 +1,6 @@
 import QuestionPage from "../questionPage";
 
-const questions = [
+export const questions = [
   { id: "insurances", label: "Assurances" },
   { id: "has_funeral_insurance", label: "Je possède une assurance obsèques" },
   { id: "funeral_insurance_company", label: "Compagnie :" },

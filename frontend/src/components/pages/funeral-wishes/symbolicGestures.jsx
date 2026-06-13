@@ -1,6 +1,6 @@
 import QuestionPage from "../questionPage";
 
-const questions = [
+export const questions = [
   { id: "religious_rites", label: "Rites religieux", type: "yesno" },
   { id: "butterfly_release", label: "Envol de papillons", type: "yesno" },
   { id: "origamis", label: "Origamis", type: "yesno" },

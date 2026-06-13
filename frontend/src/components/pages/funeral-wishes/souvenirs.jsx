@@ -1,6 +1,6 @@
 import QuestionPage from "../questionPage";
 
-const questions = [
+export const questions = [
   { id: "souvenir_card", label: "Carte (citation et photos éventuelles à annexer)", type: "yesno" },
   { id: "candle", label: "Bougie", type: "yesno" },
   { id: "memories_biography", label: "Mémoires / biographie", type: "yesno" },

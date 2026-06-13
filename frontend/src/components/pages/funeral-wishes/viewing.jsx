@@ -2,7 +2,7 @@ import QuestionPage from "../questionPage";
 
 const canVisit = { id: "relatives_can_visit", equals: "yes" };
 
-const questions = [
+export const questions = [
   { id: "relatives_can_visit", label: "Je voudrais que mes proches puissent venir se recueillir près de moi", type: "yesno" },
   { id: "objects_in_or_on_coffin", label: "J’aimerais que l’on dépose les objets suivants dans / sur mon cercueil*", type: "textarea", showIf: canVisit },
   { id: "presentation_room_decoration", label: "Décoration de la salle de présentation :", type: "textarea", showIf: canVisit },

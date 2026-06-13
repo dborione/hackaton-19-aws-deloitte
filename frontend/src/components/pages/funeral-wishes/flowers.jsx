@@ -2,7 +2,7 @@ import QuestionPage from "../questionPage";
 
 const wantsFlowers = { id: "personalized_floral_compositions", equals: "yes" };
 
-const questions = [
+export const questions = [
   { id: "personalized_floral_compositions", label: "Je souhaite une ou plusieurs compositions florales personnalisées :", type: "yesno" },
   { id: "favorite_flowers_type_color", label: "Type et couleur de mes fleurs préférées :", showIf: wantsFlowers },
   { id: "composition_types", label: "Type de composition(s) (couvre-cercueil, gerbe, coussin, couronnes, décoration florale du lieu de cérémonie, autre,…) :", type: "textarea", showIf: wantsFlowers },

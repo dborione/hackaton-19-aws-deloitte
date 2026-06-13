@@ -3,7 +3,7 @@ import QuestionPage from "../questionPage";
 const chooseDetails = { id: "let_relatives_choose", equals: "no" };
 const chooseUrn = { id: "let_relatives_choose_urn", equals: "no" };
 
-const questions = [
+export const questions = [
   { id: "let_relatives_choose", label: "Je laisse mes proches choisir", type: "yesno" },
   { id: "coffin_tint_light", label: "Claire", type: "yesno", showIf: chooseDetails },
   { id: "coffin_tint_dark", label: "Foncée", type: "yesno", showIf: chooseDetails },

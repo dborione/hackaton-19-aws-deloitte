@@ -1,6 +1,6 @@
 import QuestionPage from "../questionPage";
 
-const questions = [
+export const questions = [
   { id: "bank", label: "Banque :" },
   { id: "agreement_reference", label: "Référence de la convention :" }
 ];

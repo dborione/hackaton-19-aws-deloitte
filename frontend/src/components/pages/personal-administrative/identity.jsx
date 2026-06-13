@@ -1,6 +1,6 @@
 import QuestionPage from "../questionPage";
 
-const questions = [
+export const questions = [
   { id: "cover_full_name", label: "Nom prénom :" },
   { id: "civility", label: "Ma civilité :" },
   { id: "first_names", label: "Mon / Mes prénom(s) :" },

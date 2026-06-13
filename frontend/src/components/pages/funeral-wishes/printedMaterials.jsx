@@ -2,7 +2,7 @@ import QuestionPage from "../questionPage";
 
 const allowPrinted = { id: "no_printed_material", equals: "no" };
 
-const questions = [
+export const questions = [
   { id: "no_printed_material", label: "Je ne souhaite aucun imprimé, quel qu’il soit", type: "yesno" },
   { id: "family_chooses_printed_material", label: "Je laisse ma famille choisir", type: "yesno", showIf: allowPrinted },
   { id: "press_necrology", label: "Nécrologie dans la presse (texte à annexer)", type: "yesno", showIf: allowPrinted },

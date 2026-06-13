@@ -1,31 +1,33 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
+import config from "../config";
+import { getProgressForGroup, getProgressForPage } from "./utils/progress";
 
-import Identity from "./pages/personal-administrative/identity";
-import CurrentHome from "./pages/personal-administrative/currentHome";
-import LifeStory from "./pages/personal-administrative/lifeStory";
-import BodyAndOrganDonation from "./pages/personal-administrative/bodyAndOrganDonation";
-import Notes from "./pages/personal-administrative/notes";
+import Identity, { questions as identityQuestions } from "./pages/personal-administrative/identity";
+import CurrentHome, { questions as currentHomeQuestions } from "./pages/personal-administrative/currentHome";
+import LifeStory, { questions as lifeStoryQuestions } from "./pages/personal-administrative/lifeStory";
+import BodyAndOrganDonation, { questions as bodyAndOrganDonationQuestions } from "./pages/personal-administrative/bodyAndOrganDonation";
+import Notes, { questions as notesQuestions } from "./pages/personal-administrative/notes";
 
-import BurialChoice from "./pages/funeral-wishes/burialChoice";
-import CremationChoice from "./pages/funeral-wishes/cremationChoice";
-import CeremonyType from "./pages/funeral-wishes/ceremonyType";
-import CoffinAndUrn from "./pages/funeral-wishes/coffinAndUrn";
-import FuneralCare from "./pages/funeral-wishes/funeralCare";
-import Viewing from "./pages/funeral-wishes/viewing";
-import PrintedMaterials from "./pages/funeral-wishes/printedMaterials";
-import Souvenirs from "./pages/funeral-wishes/souvenirs";
-import Flowers from "./pages/funeral-wishes/flowers";
-import SymbolicGestures from "./pages/funeral-wishes/symbolicGestures";
-import Vehicles from "./pages/funeral-wishes/vehicles";
-import Staff from "./pages/funeral-wishes/staff";
-import Music from "./pages/funeral-wishes/music";
-import Texts from "./pages/funeral-wishes/texts";
-import SlideshowReception from "./pages/funeral-wishes/slideshowReception";
+import BurialChoice, { questions as burialChoiceQuestions } from "./pages/funeral-wishes/burialChoice";
+import CremationChoice, { questions as cremationChoiceQuestions } from "./pages/funeral-wishes/cremationChoice";
+import CeremonyType, { questions as ceremonyTypeQuestions } from "./pages/funeral-wishes/ceremonyType";
+import CoffinAndUrn, { questions as coffinAndUrnQuestions } from "./pages/funeral-wishes/coffinAndUrn";
+import FuneralCare, { questions as funeralCareQuestions } from "./pages/funeral-wishes/funeralCare";
+import Viewing, { questions as viewingQuestions } from "./pages/funeral-wishes/viewing";
+import PrintedMaterials, { questions as printedMaterialsQuestions } from "./pages/funeral-wishes/printedMaterials";
+import Souvenirs, { questions as souvenirsQuestions } from "./pages/funeral-wishes/souvenirs";
+import Flowers, { questions as flowersQuestions } from "./pages/funeral-wishes/flowers";
+import SymbolicGestures, { questions as symbolicGesturesQuestions } from "./pages/funeral-wishes/symbolicGestures";
+import Vehicles, { questions as vehiclesQuestions } from "./pages/funeral-wishes/vehicles";
+import Staff, { questions as staffQuestions } from "./pages/funeral-wishes/staff";
+import Music, { questions as musicQuestions } from "./pages/funeral-wishes/music";
+import Texts, { questions as textsQuestions } from "./pages/funeral-wishes/texts";
+import SlideshowReception, { questions as slideshowReceptionQuestions } from "./pages/funeral-wishes/slideshowReception";
 
-import Financing from "./pages/financial-planning/financing";
-import BankAgreement from "./pages/financial-planning/bankAgreement";
-import Insurance from "./pages/financial-planning/insurance";
-import SinglePayment from "./pages/financial-planning/singlePayment";
+import Financing, { questions as financingQuestions } from "./pages/financial-planning/financing";
+import BankAgreement, { questions as bankAgreementQuestions } from "./pages/financial-planning/bankAgreement";
+import Insurance, { questions as insuranceQuestions } from "./pages/financial-planning/insurance";
+import SinglePayment, { questions as singlePaymentQuestions } from "./pages/financial-planning/singlePayment";
 
 const styles = {
   nav: {
@@ -82,8 +84,16 @@ const styles = {
     cursor: "pointer"
   },
 
+  cardHeader: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    gap: 12,
+    marginBottom: 8
+  },
+
   cardTitle: {
-    margin: "0 0 8px 0",
+    margin: 0,
     fontSize: 22,
     color: "#232f3e"
   },
@@ -92,6 +102,22 @@ const styles = {
     margin: 0,
     color: "#555",
     lineHeight: 1.5
+  },
+
+  progressBadge: {
+    background: "#232f3e",
+    color: "#fff",
+    borderRadius: 999,
+    padding: "4px 10px",
+    fontSize: 13,
+    fontWeight: "bold",
+    whiteSpace: "nowrap"
+  },
+
+  progressDetails: {
+    marginTop: 10,
+    fontSize: 13,
+    color: "#666"
   },
 
   backBtn: {
@@ -141,6 +167,35 @@ const pageComponents = {
   "bank-agreement": BankAgreement,
   "insurance": Insurance,
   "single-payment": SinglePayment
+};
+
+const pageQuestions = {
+  "identity": identityQuestions,
+  "current-home": currentHomeQuestions,
+  "life-story": lifeStoryQuestions,
+  "body-and-organ-donation": bodyAndOrganDonationQuestions,
+  "notes": notesQuestions,
+
+  "burial-choice": burialChoiceQuestions,
+  "cremation-choice": cremationChoiceQuestions,
+  "ceremony-type": ceremonyTypeQuestions,
+  "coffin-and-urn": coffinAndUrnQuestions,
+  "funeral-care": funeralCareQuestions,
+  "viewing": viewingQuestions,
+  "printed-materials": printedMaterialsQuestions,
+  "souvenirs": souvenirsQuestions,
+  "flowers": flowersQuestions,
+  "symbolic-gestures": symbolicGesturesQuestions,
+  "vehicles": vehiclesQuestions,
+  "staff": staffQuestions,
+  "music": musicQuestions,
+  "texts": textsQuestions,
+  "slideshow-reception": slideshowReceptionQuestions,
+
+  "financing": financingQuestions,
+  "bank-agreement": bankAgreementQuestions,
+  "insurance": insuranceQuestions,
+  "single-payment": singlePaymentQuestions
 };
 
 const dashboardCategories = [
@@ -292,6 +347,50 @@ const dashboardCategories = [
 export default function Dashboard({ token, onLogout }) {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedSubcategory, setSelectedSubcategory] = useState(null);
+  const [answersByPage, setAnswersByPage] = useState({});
+  const [isLoadingProgress, setIsLoadingProgress] = useState(false);
+
+  const loadProgress = useCallback(async () => {
+    if (!token) {
+      return;
+    }
+
+    setIsLoadingProgress(true);
+
+    const pageIds = dashboardCategories.flatMap((category) =>
+      category.subcategories.map((subcategory) => subcategory.id)
+    );
+
+    const entries = await Promise.all(
+      pageIds.map(async (pageId) => {
+        try {
+          const res = await fetch(`${config.apiUrl}/data/answers/${pageId}`, {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          });
+
+          if (!res.ok) {
+            return [pageId, {}];
+          }
+
+          const data = await res.json();
+          return [pageId, data.answers || {}];
+        } catch (err) {
+          console.error(err);
+          return [pageId, {}];
+        }
+      })
+    );
+
+    setAnswersByPage(Object.fromEntries(entries));
+    setIsLoadingProgress(false);
+  }, [token]);
+
+  useEffect(() => {
+    loadProgress();
+  }, [loadProgress]);
 
   function openCategory(category) {
     setSelectedCategory(category);
@@ -305,12 +404,47 @@ export default function Dashboard({ token, onLogout }) {
   function goBack() {
     if (selectedSubcategory) {
       setSelectedSubcategory(null);
+      loadProgress();
       return;
     }
 
     if (selectedCategory) {
       setSelectedCategory(null);
+      loadProgress();
     }
+  }
+
+  function getSubcategoryProgress(subcategory) {
+    return getProgressForPage(
+      pageQuestions[subcategory.id] || [],
+      answersByPage[subcategory.id] || {}
+    );
+  }
+
+  function getCategoryProgress(category) {
+    return getProgressForGroup(
+      category.subcategories.map((subcategory) => ({
+        questions: pageQuestions[subcategory.id] || [],
+        answers: answersByPage[subcategory.id] || {}
+      }))
+    );
+  }
+
+  function renderProgress(progress) {
+    const label = isLoadingProgress
+      ? "..."
+      : `${progress.percent}%`;
+
+    return (
+      <>
+        <span style={styles.progressBadge}>
+          {label}
+        </span>
+        <p style={styles.progressDetails}>
+          {progress.answered}/{progress.total}
+        </p>
+      </>
+    );
   }
 
   const PageComponent = selectedSubcategory
@@ -341,18 +475,26 @@ export default function Dashboard({ token, onLogout }) {
             </section>
 
             <section style={styles.grid}>
-              {dashboardCategories.map((category) => (
-                <article
-                  key={category.id}
-                  style={styles.card}
-                  onClick={() => openCategory(category)}
-                >
-                  <h2 style={styles.cardTitle}>{category.title}</h2>
-                  <p style={styles.cardDescription}>
-                    {category.description}
-                  </p>
-                </article>
-              ))}
+              {dashboardCategories.map((category) => {
+                const progress = getCategoryProgress(category);
+
+                return (
+                  <article
+                    key={category.id}
+                    style={styles.card}
+                    onClick={() => openCategory(category)}
+                  >
+                    <div style={styles.cardHeader}>
+                      <h2 style={styles.cardTitle}>{category.title}</h2>
+                      {renderProgress(progress)}
+                    </div>
+
+                    <p style={styles.cardDescription}>
+                      {category.description}
+                    </p>
+                  </article>
+                );
+              })}
             </section>
           </>
         )}
@@ -371,18 +513,26 @@ export default function Dashboard({ token, onLogout }) {
             </section>
 
             <section style={styles.grid}>
-              {selectedCategory.subcategories.map((subcategory) => (
-                <article
-                  key={subcategory.id}
-                  style={styles.card}
-                  onClick={() => openSubcategory(subcategory)}
-                >
-                  <h2 style={styles.cardTitle}>{subcategory.title}</h2>
-                  <p style={styles.cardDescription}>
-                    {subcategory.description}
-                  </p>
-                </article>
-              ))}
+              {selectedCategory.subcategories.map((subcategory) => {
+                const progress = getSubcategoryProgress(subcategory);
+
+                return (
+                  <article
+                    key={subcategory.id}
+                    style={styles.card}
+                    onClick={() => openSubcategory(subcategory)}
+                  >
+                    <div style={styles.cardHeader}>
+                      <h2 style={styles.cardTitle}>{subcategory.title}</h2>
+                      {renderProgress(progress)}
+                    </div>
+
+                    <p style={styles.cardDescription}>
+                      {subcategory.description}
+                    </p>
+                  </article>
+                );
+              })}
             </section>
           </>
         )}

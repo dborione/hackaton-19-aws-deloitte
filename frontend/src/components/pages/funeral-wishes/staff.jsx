@@ -2,7 +2,7 @@ import QuestionPage from "../questionPage";
 
 const chooseStaff = { id: "relatives_choose_staff", equals: "no" };
 
-const questions = [
+export const questions = [
   { id: "relatives_choose_staff", label: "Je laisse mes proches choisir", type: "yesno" },
   { id: "master_of_ceremony", label: "Un maître de cérémonie", type: "yesno", showIf: chooseStaff },
   { id: "celebrant", label: "Un(e) célébrant(e)", type: "yesno", showIf: chooseStaff },

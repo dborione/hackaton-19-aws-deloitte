@@ -2,7 +2,7 @@ import QuestionPage from "../questionPage";
 
 const cremationYes = { id: "wish_cremation", equals: "yes" };
 
-const questions = [
+export const questions = [
   { id: "wish_cremation", label: "Je souhaite une incinération (crémation)", type: "yesno" },
   { id: "crematorium", label: "Crématorium :", showIf: cremationYes },
   { id: "ashes_home_conservation", label: "Conservation au domicile de :", type: "yesno", showIf: cremationYes },

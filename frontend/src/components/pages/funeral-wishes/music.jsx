@@ -5,7 +5,7 @@ const chooseMusic = [
   { id: "relatives_choose_music", equals: "no" }
 ];
 
-const questions = [
+export const questions = [
   { id: "no_music", label: "Je préfère qu’il n’y ait pas de musique", type: "yesno" },
   { id: "relatives_choose_music", label: "Je laisse mes proches choisir", type: "yesno", showIf: { id: "no_music", equals: "no" } },
   { id: "desired_music_accompaniment", label: "Je souhaite l’accompagnement suivant :", type: "textarea", showIf: chooseMusic },

@@ -5,7 +5,7 @@ const showBurialDetails = [
   { id: "wish_burial", equals: "yes" }
 ];
 
-const questions = [
+export const questions = [
   { id: "let_relatives_choose", label: "Je laisse mes proches choisir", type: "yesno" },
   { id: "wish_burial", label: "Je souhaite être inhumé(e) (enterrement)", type: "yesno", showIf: { id: "let_relatives_choose", equals: "no" } },
   { id: "cemetery", label: "Cimetière :", showIf: showBurialDetails },
