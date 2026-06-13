@@ -11,41 +11,51 @@ import { questions as insuranceQuestions } from "./pages/financial-planning/insu
   Textract returns keys in uppercase with spaces/underscores — we normalize.
 */
 const IDENTITY_FIELD_MAP = {
-    // Name / last name variants
+    // Name / last name variants (French & German & English)
     "surname": "birth_name",
     "last name": "birth_name",
     "nom": "birth_name",
     "family name": "birth_name",
     "last_name": "birth_name",
     "nom de naissance": "birth_name",
-    // First name
+    "name": "birth_name",  // Belgian ID: "Name / Name" → birth_name
+    // First name variants
     "first name": "first_names",
     "given name": "first_names",
-    "prénom": "first_names",
-    "prenom": "first_names",
     "given names": "first_names",
     "first_name": "first_names",
-    // Birth date
+    "prénom": "first_names",
+    "prenom": "first_names",
+    "prénoms": "first_names",
+    "prenoms": "first_names",
+    "vornamen": "first_names",  // German for given names
+    // Birth date variants
     "date of birth": "birth_date",
     "birth date": "birth_date",
+    "geburtsdatum": "birth_date",  // German
     "date de naissance": "birth_date",
     "dob": "birth_date",
     "birthdate": "birth_date",
     "date_of_birth": "birth_date",
-    // Birth place
+    // Birth place variants
     "place of birth": "birth_place",
     "lieu de naissance": "birth_place",
     "birthplace": "birth_place",
     "birth place": "birth_place",
-    // National register
+    // National register / Card number variants
     "national register": "national_register_number",
+    "nationalregisternr": "national_register_number",
     "n° national": "national_register_number",
     "national number": "national_register_number",
     "id number": "national_register_number",
     "numéro national": "national_register_number",
     "card number": "national_register_number",
-    // Full name reassembly
-    "name": "cover_full_name",
+    "card no": "national_register_number",
+    "card n": "national_register_number",
+    "ausweisnr": "national_register_number",
+    "n° carte": "national_register_number",
+    "numéro de carte": "national_register_number",
+    // Full name (for later reassembly if needed)
     "full name": "cover_full_name",
     "nom prénom": "cover_full_name",
 };
