@@ -1,4 +1,4 @@
-# A&G Funerals — Developer Documentation
+# A&G Funeral — Developer Documentation
 
 Document management application for franchises. Users upload documents (PDF, PNG, JPG) that are automatically analyzed by **Amazon Textract** to extract raw text, form fields, and tables. Original files are deleted immediately after extraction — only structured data is retained.
 
