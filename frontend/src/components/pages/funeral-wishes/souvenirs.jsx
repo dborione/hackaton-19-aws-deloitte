@@ -6,7 +6,7 @@ export const questions = [
   { id: "memories_biography", label: "Memories / biography", type: "yesno", category: "technical" },
   { id: "bookmark", label: "Bookmark", type: "yesno", category: "easy" },
   { id: "flower_seeds", label: "Flower seeds", type: "yesno", category: "easy" },
-  { id: "personalized_bottle", label: "Personalized bottle", type: "yesno", category: "easy" },
+  { id: "personalized_bottle", label: "Personalized bottle", type: "yesno", category: "technical" },
   { id: "tea", label: "Herbal tea / tea", type: "yesno", category: "easy" },
   { id: "souvenir_other", label: "Other:", category: "easy" }
 ];

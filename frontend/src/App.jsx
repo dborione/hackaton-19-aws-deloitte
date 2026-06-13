@@ -15,7 +15,7 @@ const userPool = new CognitoUserPool({
 const styles = {
   nav:  { background: "#232f3e", color: "#fff", padding: "16px 32px", display: "flex", justifyContent: "space-between", alignItems: "center" },
   main: { maxWidth: 900, margin: "32px auto", padding: "0 16px" },
-  btn:  { background: "#ff9900", color: "#fff", border: "none", padding: "8px 16px", borderRadius: 4, cursor: "pointer" }
+  btn:  { background: "#bd2430", color: "#fff", border: "none", padding: "8px 16px", borderRadius: 4, cursor: "pointer" }
 };
 
 export default function App() {

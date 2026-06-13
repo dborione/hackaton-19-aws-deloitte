@@ -50,7 +50,7 @@ const styles = {
   },
 
   btn: {
-    background: "#ff9900",
+    background: "#bd2430",
     color: "#fff",
     border: "none",
     padding: "8px 16px",

@@ -1,7 +1,7 @@
 import QuestionPage from "../questionPage";
 
-const chooseDetails = { id: "let_relatives_choose", equals: "no" };
-const chooseUrn = { id: "let_relatives_choose_urn", equals: "no" };
+const chooseDetails = { id: "let_relatives_choose", equals: "no", category: "easy" };
+const chooseUrn = { id: "let_relatives_choose_urn", equals: "no", category: "easy" };
 
 export const questions = [
   { id: "let_relatives_choose", label: "I let my relatives choose", type: "yesno", category: "easy" },
@@ -14,8 +14,8 @@ export const questions = [
   { id: "coffin_shape_other", label: "Other shape:", showIf: chooseDetails, category: "easy" },
   { id: "coffin_type_pefc", label: "PEFC-certified solid wood", type: "yesno", showIf: chooseDetails, category: "technical" },
   { id: "coffin_type_mdf", label: "Simple coffin (MDF)", type: "yesno", showIf: chooseDetails, category: "technical" },
-  { id: "coffin_type_other", label: "Other coffin type:", showIf: chooseDetails, category: "easy" },
-  { id: "coffin_lining", label: "Lining, with or without lace, satin, cotton, linen, color, etc.:", type: "textarea", showIf: chooseDetails, category: "easy" },
+  { id: "coffin_type_other", label: "Other coffin type:", showIf: chooseDetails, category: "technical" },
+  { id: "coffin_lining", label: "Lining, with or without lace, satin, cotton, linen, color, etc.:", type: "textarea", showIf: chooseDetails, category: "technical" },
   { id: "coffin_cover_floral", label: "Floral arrangement on the coffin", type: "yesno", showIf: chooseDetails, category: "easy" },
   { id: "coffin_cover_other", label: "Other coffin covering:", showIf: chooseDetails, category: "easy" },
   { id: "philosophical_religious_symbol", label: "Religious symbol, specify which one:", showIf: chooseDetails, category: "easy" },
@@ -26,7 +26,7 @@ export const questions = [
   { id: "urn_biodegradable", label: "Biodegradable urn", type: "yesno", showIf: [chooseDetails, chooseUrn], category: "technical" },
   { id: "urn_porcelain_ceramic", label: "Porcelain / ceramic urn", type: "yesno", showIf: [chooseDetails, chooseUrn], category: "technical" },
   { id: "urn_metallic", label: "Metal urn", type: "yesno", showIf: [chooseDetails, chooseUrn], category: "technical" },
-  { id: "urn_other", label: "Other urn type:", showIf: [chooseDetails, chooseUrn], category: "easy" },
+  { id: "urn_other", label: "Other urn type:", showIf: [chooseDetails, chooseUrn], category: "technical" },
   { id: "personalization_other_wishes", label: "Personalization and other wishes: shroud, decoration, lettering, engraving, painted mural, floral outline, etc.", type: "textarea", showIf: chooseDetails, category: "easy" }
 ];
 

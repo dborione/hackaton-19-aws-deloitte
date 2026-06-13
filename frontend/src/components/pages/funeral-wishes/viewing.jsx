@@ -1,6 +1,6 @@
 import QuestionPage from "../questionPage";
 
-const canVisit = { id: "relatives_can_visit", equals: "yes" };
+const canVisit = { id: "relatives_can_visit", equals: "yes", category: "easy" };
 
 export const questions = [
   { id: "relatives_can_visit", label: "I would like my relatives to be able to come and pay their respects near me", type: "yesno", category: "easy" },

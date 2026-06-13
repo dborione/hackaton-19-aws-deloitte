@@ -1,6 +1,6 @@
 import QuestionPage from "../questionPage";
 
-const chooseTexts = { id: "relatives_choose_texts", equals: "no" };
+const chooseTexts = { id: "relatives_choose_texts", equals: "no", category: "easy" };
 
 export const questions = [
   { id: "relatives_choose_texts", label: "I let my relatives choose", type: "yesno", category: "easy" },

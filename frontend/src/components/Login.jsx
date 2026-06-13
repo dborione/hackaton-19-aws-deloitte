@@ -2,12 +2,12 @@ import React, { useState } from "react";
 
 const styles = {
   container: { minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" },
-  card: { background: "#fff", padding: 40, borderRadius: 8, boxShadow: "0 2px 16px rgba(0,0,0,0.1)", width: 360 },
+  card: { background: "#fff", padding: 40, borderRadius: 8, boxShadow: "0 30px 40px 0 rgba(212,217,232,.25)", width: 360 },
   title: { fontSize: 24, fontWeight: "bold", marginBottom: 8, color: "#232f3e" },
   subtitle: { color: "#666", marginBottom: 24 },
   label: { display: "block", marginBottom: 4, fontWeight: "bold", fontSize: 14 },
   input: { width: "100%", padding: "10px 12px", border: "1px solid #ddd", borderRadius: 4, marginBottom: 16, fontSize: 14 },
-  btn: { width: "100%", padding: "12px", background: "#ff9900", color: "#fff", border: "none", borderRadius: 4, fontSize: 16, cursor: "pointer", fontWeight: "bold" },
+  btn: { width: "100%", padding: "12px", background: "#bd2430", color: "#fff", border: "none", borderRadius: 4, fontSize: 16, cursor: "pointer", fontWeight: "bold" },
   error: { background: "#ffeaea", color: "#c0392b", padding: "10px 12px", borderRadius: 4, marginBottom: 16, fontSize: 14 }
 };
 
@@ -47,7 +47,7 @@ export default function Login({ onLogin, onGoRegister }) {
         </form>
         <div style={{ marginTop: 16, textAlign: "center", fontSize: 14, color: "#666" }}>
           Pas encore de compte ?{" "}
-          <button style={{ color: "#ff9900", background: "none", border: "none", cursor: "pointer", fontWeight: "bold", fontSize: 14 }} onClick={onGoRegister}>
+          <button style={{ color: "#bd2430", background: "none", border: "none", cursor: "pointer", fontWeight: "bold", fontSize: 14 }} onClick={onGoRegister}>
             S'inscrire
           </button>
         </div>

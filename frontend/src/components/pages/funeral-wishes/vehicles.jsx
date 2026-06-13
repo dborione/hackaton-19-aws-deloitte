@@ -1,6 +1,6 @@
 import QuestionPage from "../questionPage";
 
-const chooseVehicle = { id: "family_chooses_vehicle", equals: "no" };
+const chooseVehicle = { id: "family_chooses_vehicle", equals: "no", category: "easy" };
 
 export const questions = [
   { id: "family_chooses_vehicle", label: "I let my family choose", type: "yesno", category: "easy" },

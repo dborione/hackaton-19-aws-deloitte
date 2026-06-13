@@ -37,7 +37,7 @@ const styles = {
 
   questionRow: {
     display: "grid",
-    gridTemplateColumns: "minmax(220px, 42%) 1fr",
+    gridTemplateColumns: "minmax(240px, 42%) 1fr",
     gap: 18,
     alignItems: "center",
     borderBottom: "1px solid #eee",
@@ -87,6 +87,27 @@ function getQuestionCategory(question) {
   return "easy";
 }
 
+function buildCategoryById(questions) {
+  const result = {};
+
+  questions.forEach((question) => {
+    if (!question || !question.id) {
+      return;
+    }
+
+    result[question.id] = getQuestionCategory(question);
+  });
+
+  return result;
+}
+
+function attachCategories(questions, categoryById) {
+  return questions.map((question) => ({
+    ...question,
+    category: categoryById[question.id] || getQuestionCategory(question)
+  }));
+}
+
 export default function QuestionPage({
   pageId,
   title,
@@ -96,14 +117,14 @@ export default function QuestionPage({
   const [answers, setAnswers] = useState({});
   const [status, setStatus] = useState("");
 
-  const allQuestions = useMemo(() => {
-    const normalized = normalizeQuestions(questions);
-
-    return normalized.map((question, index) => ({
-      ...question,
-      category: question.category || questions[index]?.category || "easy"
-    }));
+  const categoryById = useMemo(() => {
+    return buildCategoryById(questions || []);
   }, [questions]);
+
+  const allQuestions = useMemo(() => {
+    const normalized = normalizeQuestions(questions || []);
+    return attachCategories(normalized, categoryById);
+  }, [questions, categoryById]);
 
   useEffect(() => {
     async function loadAnswers() {
@@ -224,7 +245,7 @@ export default function QuestionPage({
         <label>
           <input
             type="radio"
-            name={question.id}
+            name={`${pageId}-${question.id}`}
             value="yes"
             checked={answers[question.id] === "yes"}
             onChange={() => handleYesNoChange(question.id, "yes")}
@@ -235,7 +256,7 @@ export default function QuestionPage({
         <label>
           <input
             type="radio"
-            name={question.id}
+            name={`${pageId}-${question.id}`}
             value="no"
             checked={answers[question.id] === "no"}
             onChange={() => handleYesNoChange(question.id, "no")}
@@ -272,7 +293,10 @@ export default function QuestionPage({
     );
   };
 
-  const visibleQuestions = getVisibleQuestions(allQuestions, answers);
+  const visibleQuestions = attachCategories(
+    getVisibleQuestions(allQuestions, answers),
+    categoryById
+  );
 
   const easyQuestions = visibleQuestions.filter(
     (question) => getQuestionCategory(question) === "easy"
@@ -300,13 +324,13 @@ export default function QuestionPage({
       </section>
 
       <section style={styles.categoryBox}>
-        <h2 style={styles.categoryTitle}>Technical or harder questions</h2>
+        <h2 style={styles.categoryTitle}>Technical / research questions</h2>
         <p style={styles.categoryHint}>
-          These questions may require checking documents, understanding a technical funeral option, contacting someone, or doing a bit of research before answering.
+          These questions usually require checking a document, finding a number or address, understanding a funeral option, contacting someone, or doing a bit of research before answering.
         </p>
 
         {technicalQuestions.length === 0 ? (
-          <p>No technical or harder questions visible yet.</p>
+          <p>No technical / research questions visible yet.</p>
         ) : (
           technicalQuestions.map(renderQuestion)
         )}

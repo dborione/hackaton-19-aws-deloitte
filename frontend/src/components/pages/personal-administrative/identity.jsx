@@ -9,7 +9,7 @@ export const questions = [
   { id: "birth_date", label: "Date of birth (DD / MM / YYYY):", category: "technical" },
   { id: "birth_place", label: "Place of birth (city / country):", category: "technical" },
   { id: "national_register_number", label: "National register number:", category: "technical" },
-  { id: "contacts_in_case_of_death", label: "Relative(s) to contact in case of death:", category: "easy" }
+  { id: "contacts_in_case_of_death", label: "Relative(s) to contact in case of death:", category: "technical" }
 ];
 
 export default function Identity({ token }) {

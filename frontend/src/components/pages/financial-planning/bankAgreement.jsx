@@ -1,7 +1,7 @@
 import QuestionPage from "../questionPage";
 
 export const questions = [
-  { id: "bank", label: "Bank:", category: "easy" },
+  { id: "bank", label: "Bank:", category: "technical" },
   { id: "agreement_reference", label: "Bank agreement reference:", category: "technical" }
 ];
 

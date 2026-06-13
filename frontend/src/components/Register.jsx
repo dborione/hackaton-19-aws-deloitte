@@ -2,15 +2,15 @@ import React, { useState } from "react";
 
 const styles = {
   container: { minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" },
-  card:      { background: "#fff", padding: 40, borderRadius: 8, boxShadow: "0 2px 16px rgba(0,0,0,0.1)", width: 360 },
+  card:      { background: "#fff", padding: 40, borderRadius: 8, boxShadow: "0 30px 40px 0 rgba(212,217,232,.25)", width: 360 },
   title:     { fontSize: 24, fontWeight: "bold", marginBottom: 8, color: "#232f3e" },
   subtitle:  { color: "#666", marginBottom: 24 },
   label:     { display: "block", marginBottom: 4, fontWeight: "bold", fontSize: 14 },
   input:     { width: "100%", padding: "10px 12px", border: "1px solid #ddd", borderRadius: 4, marginBottom: 4, fontSize: 14, boxSizing: "border-box" },
   hint:      { fontSize: 12, color: "#999", marginBottom: 12 },
-  btn:       { width: "100%", padding: "12px", background: "#ff9900", color: "#fff", border: "none", borderRadius: 4, fontSize: 16, cursor: "pointer", fontWeight: "bold", marginTop: 8 },
+  btn:       { width: "100%", padding: "12px", background: "#bd2430", color: "#fff", border: "none", borderRadius: 4, fontSize: 16, cursor: "pointer", fontWeight: "bold", marginTop: 8 },
   link:      { marginTop: 16, textAlign: "center", fontSize: 14, color: "#666" },
-  linkBtn:   { color: "#ff9900", background: "none", border: "none", cursor: "pointer", fontWeight: "bold", fontSize: 14 },
+  linkBtn:   { color: "#bd2430", background: "none", border: "none", cursor: "pointer", fontWeight: "bold", fontSize: 14 },
   error:     { background: "#ffeaea", color: "#c0392b", padding: "10px 12px", borderRadius: 4, marginBottom: 16, fontSize: 14 },
   success:   { background: "#eafff0", color: "#27ae60", padding: "10px 12px", borderRadius: 4, marginBottom: 16, fontSize: 14 },
   strength:  (s) => ({ height: 4, borderRadius: 2, marginBottom: 12, background: ["#eee","#e74c3c","#e67e22","#f1c40f","#27ae60"][s], width: `${s * 25}%`, transition: "all 0.3s" })
