@@ -33,7 +33,7 @@ export default function Login({ onLogin, onGoRegister }) {
   return (
     <div style={styles.container}>
       <div style={styles.card}>
-        <h1 style={styles.title}>A&G Funerals</h1>
+        <h1 style={styles.title}>A&G Funeral</h1>
         <p style={styles.subtitle}>Connectez-vous pour accéder à votre espace</p>
         {error && <div style={styles.error}>{error}</div>}
         <form onSubmit={handleSubmit}>

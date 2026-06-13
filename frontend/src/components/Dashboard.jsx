@@ -452,7 +452,7 @@ export default function Dashboard({ token, onLogout }) {
     <>
       <nav style={styles.nav}>
         <span style={{ fontSize: 20, fontWeight: "bold" }}>
-          A&G Funerals
+          A&G Funeral
         </span>
 
         <div style={{ display: "flex", gap: 12 }}>
@@ -548,7 +548,7 @@ export default function Dashboard({ token, onLogout }) {
         {!activeSharedToken && !isReceivedAnswersOpen && !isAccountSharingOpen && !selectedCategory && !selectedSubcategory && (
           <>
             <section style={styles.header}>
-              <h1 style={styles.title}>A&G Funerals Dashboard</h1>
+              <h1 style={styles.title}>A&G Funeral Dashboard</h1>
               <p style={styles.subtitle}>
                 Choose your own instance, or open an invited instance where
                 someone shared fields with you.
