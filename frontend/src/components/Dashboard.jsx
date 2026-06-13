@@ -357,34 +357,28 @@ export default function Dashboard({ token, onLogout }) {
 
     setIsLoadingProgress(true);
 
-    const pageIds = dashboardCategories.flatMap((category) =>
-      category.subcategories.map((subcategory) => subcategory.id)
-    );
-
-    const entries = await Promise.all(
-      pageIds.map(async (pageId) => {
-        try {
-          const res = await fetch(`${config.apiUrl}/data/answers/${pageId}`, {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          });
-
-          if (!res.ok) {
-            return [pageId, {}];
-          }
-
-          const data = await res.json();
-          return [pageId, data.answers || {}];
-        } catch (err) {
-          console.error(err);
-          return [pageId, {}];
+    try {
+      const res = await fetch(`${config.apiUrl}/data/answers`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`
         }
-      })
-    );
+      });
 
-    setAnswersByPage(Object.fromEntries(entries));
+      if (!res.ok) {
+        throw new Error(await res.text());
+      }
+
+      const data = await res.json();
+
+      console.log("ALL ANSWERS FOR PROGRESS:", data);
+
+      setAnswersByPage(data.answersByPage || {});
+    } catch (err) {
+      console.error(err);
+      setAnswersByPage({});
+    }
+
     setIsLoadingProgress(false);
   }, [token]);
 
@@ -431,15 +425,12 @@ export default function Dashboard({ token, onLogout }) {
   }
 
   function renderProgress(progress) {
-    const label = isLoadingProgress
-      ? "..."
-      : `${progress.percent}%`;
-
     return (
       <>
         <span style={styles.progressBadge}>
-          {label}
+          {progress.percent}%
         </span>
+
         <p style={styles.progressDetails}>
           {progress.answered}/{progress.total}
         </p>
