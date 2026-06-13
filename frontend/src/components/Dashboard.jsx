@@ -1,5 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import config from "../config";
+
+import AccountSharing from "./pages/accountSharing";
 import { getProgressForGroup, getProgressForPage } from "./utils/progress";
 
 import Identity, { questions as identityQuestions } from "./pages/personal-administrative/identity";
@@ -141,60 +143,60 @@ const styles = {
 };
 
 const pageComponents = {
-  "identity": Identity,
+  identity: Identity,
   "current-home": CurrentHome,
   "life-story": LifeStory,
   "body-and-organ-donation": BodyAndOrganDonation,
-  "notes": Notes,
+  notes: Notes,
 
   "burial-choice": BurialChoice,
   "cremation-choice": CremationChoice,
   "ceremony-type": CeremonyType,
   "coffin-and-urn": CoffinAndUrn,
   "funeral-care": FuneralCare,
-  "viewing": Viewing,
+  viewing: Viewing,
   "printed-materials": PrintedMaterials,
-  "souvenirs": Souvenirs,
-  "flowers": Flowers,
+  souvenirs: Souvenirs,
+  flowers: Flowers,
   "symbolic-gestures": SymbolicGestures,
-  "vehicles": Vehicles,
-  "staff": Staff,
-  "music": Music,
-  "texts": Texts,
+  vehicles: Vehicles,
+  staff: Staff,
+  music: Music,
+  texts: Texts,
   "slideshow-reception": SlideshowReception,
 
-  "financing": Financing,
+  financing: Financing,
   "bank-agreement": BankAgreement,
-  "insurance": Insurance,
+  insurance: Insurance,
   "single-payment": SinglePayment
 };
 
 const pageQuestions = {
-  "identity": identityQuestions,
+  identity: identityQuestions,
   "current-home": currentHomeQuestions,
   "life-story": lifeStoryQuestions,
   "body-and-organ-donation": bodyAndOrganDonationQuestions,
-  "notes": notesQuestions,
+  notes: notesQuestions,
 
   "burial-choice": burialChoiceQuestions,
   "cremation-choice": cremationChoiceQuestions,
   "ceremony-type": ceremonyTypeQuestions,
   "coffin-and-urn": coffinAndUrnQuestions,
   "funeral-care": funeralCareQuestions,
-  "viewing": viewingQuestions,
+  viewing: viewingQuestions,
   "printed-materials": printedMaterialsQuestions,
-  "souvenirs": souvenirsQuestions,
-  "flowers": flowersQuestions,
+  souvenirs: souvenirsQuestions,
+  flowers: flowersQuestions,
   "symbolic-gestures": symbolicGesturesQuestions,
-  "vehicles": vehiclesQuestions,
-  "staff": staffQuestions,
-  "music": musicQuestions,
-  "texts": textsQuestions,
+  vehicles: vehiclesQuestions,
+  staff: staffQuestions,
+  music: musicQuestions,
+  texts: textsQuestions,
   "slideshow-reception": slideshowReceptionQuestions,
 
-  "financing": financingQuestions,
+  financing: financingQuestions,
   "bank-agreement": bankAgreementQuestions,
-  "insurance": insuranceQuestions,
+  insurance: insuranceQuestions,
   "single-payment": singlePaymentQuestions
 };
 
@@ -349,6 +351,7 @@ export default function Dashboard({ token, onLogout }) {
   const [selectedSubcategory, setSelectedSubcategory] = useState(null);
   const [answersByPage, setAnswersByPage] = useState({});
   const [isLoadingProgress, setIsLoadingProgress] = useState(false);
+  const [isAccountSharingOpen, setIsAccountSharingOpen] = useState(false);
 
   const loadProgress = useCallback(async () => {
     if (!token) {
@@ -386,16 +389,30 @@ export default function Dashboard({ token, onLogout }) {
     loadProgress();
   }, [loadProgress]);
 
+  function openAccountSharing() {
+    setSelectedCategory(null);
+    setSelectedSubcategory(null);
+    setIsAccountSharingOpen(true);
+  }
+
   function openCategory(category) {
+    setIsAccountSharingOpen(false);
     setSelectedCategory(category);
     setSelectedSubcategory(null);
   }
 
   function openSubcategory(subcategory) {
+    setIsAccountSharingOpen(false);
     setSelectedSubcategory(subcategory);
   }
 
   function goBack() {
+    if (isAccountSharingOpen) {
+      setIsAccountSharingOpen(false);
+      loadProgress();
+      return;
+    }
+
     if (selectedSubcategory) {
       setSelectedSubcategory(null);
       loadProgress();
@@ -426,7 +443,7 @@ export default function Dashboard({ token, onLogout }) {
 
   function renderProgress(progress) {
     return (
-      <>
+      <div>
         <span style={styles.progressBadge}>
           {progress.percent}%
         </span>
@@ -434,7 +451,7 @@ export default function Dashboard({ token, onLogout }) {
         <p style={styles.progressDetails}>
           {progress.answered}/{progress.total}
         </p>
-      </>
+      </div>
     );
   }
 
@@ -449,13 +466,49 @@ export default function Dashboard({ token, onLogout }) {
           Franchise App
         </span>
 
-        <button style={styles.btn} onClick={onLogout}>
-          Logout
-        </button>
+        <div style={{ display: "flex", gap: 12 }}>
+          <button style={styles.btn} onClick={openAccountSharing}>
+            Account sharing
+          </button>
+
+          <button style={styles.btn} onClick={onLogout}>
+            Logout
+          </button>
+        </div>
       </nav>
 
       <main style={styles.main}>
-        {!selectedCategory && !selectedSubcategory && (
+        {isLoadingProgress && (
+          <p style={styles.subtitle}>
+            Loading progress...
+          </p>
+        )}
+
+        {isAccountSharingOpen && (
+          <>
+            <button style={styles.backBtn} onClick={goBack}>
+              ← Back to dashboard
+            </button>
+
+            <section style={styles.header}>
+              <h1 style={styles.title}>Account Sharing</h1>
+              <p style={styles.subtitle}>
+                Create a private link to let someone help fill only selected
+                fields. The recipient will only see the fields you choose.
+              </p>
+            </section>
+
+            <div style={styles.emptyBox}>
+              <AccountSharing
+                token={token}
+                dashboardCategories={dashboardCategories}
+                pageQuestions={pageQuestions}
+              />
+            </div>
+          </>
+        )}
+
+        {!isAccountSharingOpen && !selectedCategory && !selectedSubcategory && (
           <>
             <section style={styles.header}>
               <h1 style={styles.title}>Final Wishes Dashboard</h1>
@@ -490,7 +543,7 @@ export default function Dashboard({ token, onLogout }) {
           </>
         )}
 
-        {selectedCategory && !selectedSubcategory && (
+        {!isAccountSharingOpen && selectedCategory && !selectedSubcategory && (
           <>
             <button style={styles.backBtn} onClick={goBack}>
               ← Back to dashboard
@@ -528,7 +581,7 @@ export default function Dashboard({ token, onLogout }) {
           </>
         )}
 
-        {selectedCategory && selectedSubcategory && (
+        {!isAccountSharingOpen && selectedCategory && selectedSubcategory && (
           <>
             <button style={styles.backBtn} onClick={goBack}>
               ← Back to {selectedCategory.title}

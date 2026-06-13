@@ -1,4 +1,3 @@
-const sharing = require("./sharingHandlers");
 const { RDSDataClient, ExecuteStatementCommand } = require("@aws-sdk/client-rds-data");
 
 const rds = new RDSDataClient({
@@ -54,11 +53,6 @@ function parseBody(event) {
 }
 
 exports.handler = async (event) => {
-  const sharingRouteResponse = await sharing.tryHandleSharingRoute(event);
-  if (sharingRouteResponse) {
-    return sharingRouteResponse;
-  }
-
   const method = getMethod(event);
   const path = getPath(event);
 
