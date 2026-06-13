@@ -310,31 +310,27 @@ export default function QuestionPage({
     <div style={styles.page}>
       <h1 style={styles.title}>{title}</h1>
 
-      <section style={styles.categoryBox}>
-        <h2 style={styles.categoryTitle}>Easy to answer</h2>
-        <p style={styles.categoryHint}>
-          These questions can usually be answered on the spot, based on personal preferences.
-        </p>
+      {easyQuestions.length > 0 && (
+        <section style={styles.categoryBox}>
+          <h2 style={styles.categoryTitle}>Easy to answer</h2>
+          <p style={styles.categoryHint}>
+            These questions can usually be answered on the spot, based on personal preferences.
+          </p>
 
-        {easyQuestions.length === 0 ? (
-          <p>No easy questions visible yet.</p>
-        ) : (
-          easyQuestions.map(renderQuestion)
-        )}
-      </section>
+          {easyQuestions.map(renderQuestion)}
+        </section>
+      )}
 
-      <section style={styles.categoryBox}>
-        <h2 style={styles.categoryTitle}>Technical / research questions</h2>
-        <p style={styles.categoryHint}>
-          These questions usually require checking a document, finding a number or address, understanding a funeral option, contacting someone, or doing a bit of research before answering.
-        </p>
+      {technicalQuestions.length > 0 && (
+        <section style={styles.categoryBox}>
+          <h2 style={styles.categoryTitle}>Technical / research questions</h2>
+          <p style={styles.categoryHint}>
+            These questions usually require checking a document, finding a number or address, understanding a funeral option, contacting someone, or doing a bit of research before answering.
+          </p>
 
-        {technicalQuestions.length === 0 ? (
-          <p>No technical / research questions visible yet.</p>
-        ) : (
-          technicalQuestions.map(renderQuestion)
-        )}
-      </section>
+          {technicalQuestions.map(renderQuestion)}
+        </section>
+      )}
 
       {status && <p style={styles.status}>{status}</p>}
     </div>
