@@ -261,7 +261,7 @@ function getShareTokenFromUrl() {
   return new URLSearchParams(window.location.search).get("shareToken");
 }
 
-export default function Dashboard({ token, onLogout }) {
+export default function Dashboard({ token, onLogout, onNavigate }) {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedSubcategory, setSelectedSubcategory] = useState(null);
   const [answersByPage, setAnswersByPage] = useState({});
@@ -462,6 +462,13 @@ export default function Dashboard({ token, onLogout }) {
 
           <button style={styles.btn} onClick={openReceivedAnswers}>
             Received answers
+          </button>
+
+          <button
+            style={styles.btn}
+            onClick={() => onNavigate("documents")}
+          >
+            Documents
           </button>
 
           <button style={styles.btn} onClick={onLogout}>

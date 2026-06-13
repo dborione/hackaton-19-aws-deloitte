@@ -3,8 +3,7 @@ import { CognitoUserPool, CognitoUser, AuthenticationDetails } from "amazon-cogn
 import Login from "./components/Login";
 import Register from "./components/Register";
 import Dashboard from "./components/Dashboard";
-import DocumentList from "./components/DocumentList";
-import UploadDocument from "./components/UploadDocument";
+import DocumentsPage from "./components/DocumentsPage";
 import config from "./config";
 
 const userPool = new CognitoUserPool({
@@ -22,6 +21,7 @@ export default function App() {
   const [user, setUser]     = useState(null);
   const [token, setToken]   = useState(null);
   const [screen, setScreen] = useState("login"); // "login" | "register"
+  const [page, setPage] = useState("dashboard"); // "dashboard" | "documents"
 
   useEffect(() => {
     const current = userPool.getCurrentUser();
@@ -92,5 +92,9 @@ export default function App() {
     return <Login onLogin={handleLogin} onGoRegister={() => setScreen("register")} />;
   }
 
-  return <Dashboard token={token} onLogout={handleLogout} />;
+  if (page === "documents") {
+    return <DocumentsPage token={token} onBack={() => setPage("dashboard")} />;
+  }
+
+  return <Dashboard token={token} onLogout={handleLogout} onNavigate={setPage} />;
 }
