@@ -2,8 +2,6 @@ import React, { useCallback, useEffect, useState } from "react";
 import config from "../config";
 
 import AccountSharing from "./pages/accountSharing";
-import SharedInvitation from "./pages/sharedInvitation";
-import ReceivedSharedAnswers from "./pages/receivedSharedAnswers";
 import { getProgressForGroup, getProgressForPage } from "./utils/progress";
 
 import Identity, { questions as identityQuestions } from "./pages/personal-administrative/identity";
@@ -72,11 +70,6 @@ const styles = {
     margin: 0,
     color: "#555",
     lineHeight: 1.5
-  },
-
-  sectionTitle: {
-    margin: "32px 0 16px 0",
-    color: "#232f3e"
   },
 
   grid: {
@@ -213,11 +206,31 @@ const dashboardCategories = [
     title: "Personal and Administrative",
     description: "Identity, contact details, life story, donation choices and general notes.",
     subcategories: [
-      { id: "identity", title: "Identity", description: "Civil status, names, birth information, national register number and emergency contacts." },
-      { id: "current-home", title: "Current Home", description: "Current address, postal code, locality, phone number and email." },
-      { id: "life-story", title: "Life Story", description: "Family history, professional path, distinctions, passions, life motto and memories." },
-      { id: "body-and-organ-donation", title: "Body and Organ Donation", description: "Body donation to science, university information, document location and organ donation." },
-      { id: "notes", title: "Notes", description: "Free notes and additional wishes." }
+      {
+        id: "identity",
+        title: "Identity",
+        description: "Civil status, names, birth information, national register number and emergency contacts."
+      },
+      {
+        id: "current-home",
+        title: "Current Home",
+        description: "Current address, postal code, locality, phone number and email."
+      },
+      {
+        id: "life-story",
+        title: "Life Story",
+        description: "Family history, professional path, distinctions, passions, life motto and memories."
+      },
+      {
+        id: "body-and-organ-donation",
+        title: "Body and Organ Donation",
+        description: "Body donation to science, university information, document location and organ donation."
+      },
+      {
+        id: "notes",
+        title: "Notes",
+        description: "Free notes and additional wishes."
+      }
     ]
   },
 
@@ -226,21 +239,81 @@ const dashboardCategories = [
     title: "Funeral Wishes",
     description: "Choices about burial, cremation, ceremony, coffin, urn, care, visits and personalization.",
     subcategories: [
-      { id: "burial-choice", title: "Burial Choice", description: "Burial choice, cemetery, concession, vault and new concession wishes." },
-      { id: "cremation-choice", title: "Cremation Choice", description: "Crematorium, destination of ashes, urn burial, scattering and ashes division." },
-      { id: "ceremony-type", title: "Ceremony Type", description: "Civil or religious ceremony, place, privacy and clothing theme." },
-      { id: "coffin-and-urn", title: "Coffin and Urn", description: "Coffin tint, shape, type, lining, decoration, philosophical signs and urn choice." },
-      { id: "funeral-care", title: "Funeral Care", description: "Presentation care, conservation care, clothing and care preferences." },
-      { id: "viewing", title: "Viewing", description: "Visits, objects in or on the coffin, presentation room decoration and viewing place." },
-      { id: "printed-materials", title: "Printed Materials", description: "Necrology, announcement cards, online announcements, photos, obit and thanks." },
-      { id: "souvenirs", title: "Souvenirs", description: "Cards, candles, biography, bookmarks, flower seeds, personalized bottle and tea." },
-      { id: "flowers", title: "Flowers", description: "Floral compositions, preferred flowers, donations and no-flowers request." },
-      { id: "symbolic-gestures", title: "Symbolic Gestures", description: "Religious rites, butterflies, origami, light rite, message box and tree planting." },
-      { id: "vehicles", title: "Vehicles", description: "Hearse, funeral van, other vehicle and family choice." },
-      { id: "staff", title: "Staff", description: "Master of ceremony, celebrant and coffin bearers." },
-      { id: "music", title: "Music", description: "Musical accompaniment, choir, musicians, soloist or no music." },
-      { id: "texts", title: "Texts", description: "Significant readings and final audio or video message." },
-      { id: "slideshow-reception", title: "Slideshow and Reception", description: "Photo slideshow, personal recipe, favorite treats, reception place and reception choice." }
+      {
+        id: "burial-choice",
+        title: "Burial Choice",
+        description: "Burial choice, cemetery, concession, vault and new concession wishes."
+      },
+      {
+        id: "cremation-choice",
+        title: "Cremation Choice",
+        description: "Crematorium, destination of ashes, urn burial, scattering and ashes division."
+      },
+      {
+        id: "ceremony-type",
+        title: "Ceremony Type",
+        description: "Civil or religious ceremony, place, privacy and clothing theme."
+      },
+      {
+        id: "coffin-and-urn",
+        title: "Coffin and Urn",
+        description: "Coffin tint, shape, type, lining, decoration, philosophical signs and urn choice."
+      },
+      {
+        id: "funeral-care",
+        title: "Funeral Care",
+        description: "Presentation care, conservation care, clothing and care preferences."
+      },
+      {
+        id: "viewing",
+        title: "Viewing",
+        description: "Visits, objects in or on the coffin, presentation room decoration and viewing place."
+      },
+      {
+        id: "printed-materials",
+        title: "Printed Materials",
+        description: "Necrology, announcement cards, online announcements, photos, obit and thanks."
+      },
+      {
+        id: "souvenirs",
+        title: "Souvenirs",
+        description: "Cards, candles, biography, bookmarks, flower seeds, personalized bottle and tea."
+      },
+      {
+        id: "flowers",
+        title: "Flowers",
+        description: "Floral compositions, preferred flowers, donations and no-flowers request."
+      },
+      {
+        id: "symbolic-gestures",
+        title: "Symbolic Gestures",
+        description: "Religious rites, butterflies, origami, light rite, message box and tree planting."
+      },
+      {
+        id: "vehicles",
+        title: "Vehicles",
+        description: "Hearse, funeral van, other vehicle and family choice."
+      },
+      {
+        id: "staff",
+        title: "Staff",
+        description: "Master of ceremony, celebrant and coffin bearers."
+      },
+      {
+        id: "music",
+        title: "Music",
+        description: "Musical accompaniment, choir, musicians, soloist or no music."
+      },
+      {
+        id: "texts",
+        title: "Texts",
+        description: "Significant readings and final audio or video message."
+      },
+      {
+        id: "slideshow-reception",
+        title: "Slideshow and Reception",
+        description: "Photo slideshow, personal recipe, favorite treats, reception place and reception choice."
+      }
     ]
   },
 
@@ -249,17 +322,29 @@ const dashboardCategories = [
     title: "Financial Planning",
     description: "Registration, bank agreement, insurance and single-payment preparation.",
     subcategories: [
-      { id: "financing", title: "Financing", description: "Registration of last wishes and bank agreement for funeral costs." },
-      { id: "bank-agreement", title: "Bank Agreement", description: "Bank and bank agreement reference." },
-      { id: "insurance", title: "Insurance", description: "Funeral insurance, life insurance, company, policy number, broker and address." },
-      { id: "single-payment", title: "Single Payment", description: "Single payment under conditions and amount/payment date." }
+      {
+        id: "financing",
+        title: "Financing",
+        description: "Registration of last wishes and bank agreement for funeral costs."
+      },
+      {
+        id: "bank-agreement",
+        title: "Bank Agreement",
+        description: "Bank and bank agreement reference."
+      },
+      {
+        id: "insurance",
+        title: "Insurance",
+        description: "Funeral insurance, life insurance, company, policy number, broker and address."
+      },
+      {
+        id: "single-payment",
+        title: "Single Payment",
+        description: "Single payment under conditions and amount/payment date."
+      }
     ]
   }
 ];
-
-function getShareTokenFromUrl() {
-  return new URLSearchParams(window.location.search).get("shareToken");
-}
 
 export default function Dashboard({ token, onLogout }) {
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -267,15 +352,11 @@ export default function Dashboard({ token, onLogout }) {
   const [answersByPage, setAnswersByPage] = useState({});
   const [isLoadingProgress, setIsLoadingProgress] = useState(false);
   const [isAccountSharingOpen, setIsAccountSharingOpen] = useState(false);
-  const [isReceivedAnswersOpen, setIsReceivedAnswersOpen] = useState(false);
-  const [shareToken, setShareToken] = useState(getShareTokenFromUrl());
-  const [selectedSharedInviteToken, setSelectedSharedInviteToken] = useState(null);
-  const [sharedInvitations, setSharedInvitations] = useState([]);
-
-  const activeSharedToken = shareToken || selectedSharedInviteToken;
 
   const loadProgress = useCallback(async () => {
-    if (!token) return;
+    if (!token) {
+      return;
+    }
 
     setIsLoadingProgress(true);
 
@@ -292,6 +373,9 @@ export default function Dashboard({ token, onLogout }) {
       }
 
       const data = await res.json();
+
+      console.log("ALL ANSWERS FOR PROGRESS:", data);
+
       setAnswersByPage(data.answersByPage || {});
     } catch (err) {
       console.error(err);
@@ -301,104 +385,31 @@ export default function Dashboard({ token, onLogout }) {
     setIsLoadingProgress(false);
   }, [token]);
 
-  const loadSharedInvitations = useCallback(async () => {
-    if (!token) return;
-
-    try {
-      const res = await fetch(`${config.apiUrl}/sharing/my-invitations`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-
-      if (!res.ok) {
-        throw new Error(await res.text());
-      }
-
-      const data = await res.json();
-      setSharedInvitations(data.invitations || []);
-    } catch (err) {
-      console.error(err);
-      setSharedInvitations([]);
-    }
-  }, [token]);
-
   useEffect(() => {
     loadProgress();
-    loadSharedInvitations();
-  }, [loadProgress, loadSharedInvitations]);
-
-  function clearShareTokenFromUrl() {
-    const url = new URL(window.location.href);
-    url.searchParams.delete("shareToken");
-    window.history.replaceState({}, "", url.toString());
-    setShareToken(null);
-  }
+  }, [loadProgress]);
 
   function openAccountSharing() {
-    clearShareTokenFromUrl();
-    setSelectedSharedInviteToken(null);
     setSelectedCategory(null);
     setSelectedSubcategory(null);
-    setIsReceivedAnswersOpen(false);
     setIsAccountSharingOpen(true);
   }
 
-  function openReceivedAnswers() {
-    clearShareTokenFromUrl();
-    setSelectedSharedInviteToken(null);
-    setSelectedCategory(null);
-    setSelectedSubcategory(null);
-    setIsAccountSharingOpen(false);
-    setIsReceivedAnswersOpen(true);
-  }
-
-  function openSharedInvitation(inviteToken) {
-    clearShareTokenFromUrl();
-    setIsAccountSharingOpen(false);
-    setIsReceivedAnswersOpen(false);
-    setSelectedCategory(null);
-    setSelectedSubcategory(null);
-    setSelectedSharedInviteToken(inviteToken);
-  }
-
   function openCategory(category) {
-    clearShareTokenFromUrl();
-    setSelectedSharedInviteToken(null);
     setIsAccountSharingOpen(false);
-    setIsReceivedAnswersOpen(false);
     setSelectedCategory(category);
     setSelectedSubcategory(null);
   }
 
   function openSubcategory(subcategory) {
-    clearShareTokenFromUrl();
-    setSelectedSharedInviteToken(null);
     setIsAccountSharingOpen(false);
-    setIsReceivedAnswersOpen(false);
     setSelectedSubcategory(subcategory);
   }
 
   function goBack() {
-    if (activeSharedToken) {
-      clearShareTokenFromUrl();
-      setSelectedSharedInviteToken(null);
-      loadSharedInvitations();
-      return;
-    }
-
     if (isAccountSharingOpen) {
       setIsAccountSharingOpen(false);
       loadProgress();
-      loadSharedInvitations();
-      return;
-    }
-
-    if (isReceivedAnswersOpen) {
-      setIsReceivedAnswersOpen(false);
-      loadProgress();
-      loadSharedInvitations();
       return;
     }
 
@@ -460,10 +471,6 @@ export default function Dashboard({ token, onLogout }) {
             Account sharing
           </button>
 
-          <button style={styles.btn} onClick={openReceivedAnswers}>
-            Received answers
-          </button>
-
           <button style={styles.btn} onClick={onLogout}>
             Logout
           </button>
@@ -477,51 +484,7 @@ export default function Dashboard({ token, onLogout }) {
           </p>
         )}
 
-        {activeSharedToken && (
-          <>
-            <button style={styles.backBtn} onClick={goBack}>
-              ← Back to dashboard
-            </button>
-
-            <section style={styles.header}>
-              <h1 style={styles.title}>Shared Invitation</h1>
-              <p style={styles.subtitle}>
-                This is a separate invited instance. You only see the fields
-                that were shared with you.
-              </p>
-            </section>
-
-            <div style={styles.emptyBox}>
-              <SharedInvitation
-                token={token}
-                inviteToken={activeSharedToken}
-                onClose={goBack}
-                onSaved={loadSharedInvitations}
-              />
-            </div>
-          </>
-        )}
-
-        {!activeSharedToken && isReceivedAnswersOpen && (
-          <>
-            <button style={styles.backBtn} onClick={goBack}>
-              ← Back to dashboard
-            </button>
-
-            <section style={styles.header}>
-              <h1 style={styles.title}>Received shared answers</h1>
-              <p style={styles.subtitle}>
-                Review the answers submitted by people you invited.
-              </p>
-            </section>
-
-            <div style={styles.emptyBox}>
-              <ReceivedSharedAnswers token={token} />
-            </div>
-          </>
-        )}
-
-        {!activeSharedToken && !isReceivedAnswersOpen && isAccountSharingOpen && (
+        {isAccountSharingOpen && (
           <>
             <button style={styles.backBtn} onClick={goBack}>
               ← Back to dashboard
@@ -545,17 +508,15 @@ export default function Dashboard({ token, onLogout }) {
           </>
         )}
 
-        {!activeSharedToken && !isReceivedAnswersOpen && !isAccountSharingOpen && !selectedCategory && !selectedSubcategory && (
+        {!isAccountSharingOpen && !selectedCategory && !selectedSubcategory && (
           <>
             <section style={styles.header}>
               <h1 style={styles.title}>Final Wishes Dashboard</h1>
               <p style={styles.subtitle}>
-                Choose your own instance, or open an invited instance where
-                someone shared fields with you.
+                Choose one of the three main sections to organize the funeral
+                planning information.
               </p>
             </section>
-
-            <h2 style={styles.sectionTitle}>My own final wishes</h2>
 
             <section style={styles.grid}>
               {dashboardCategories.map((category) => {
@@ -579,48 +540,10 @@ export default function Dashboard({ token, onLogout }) {
                 );
               })}
             </section>
-
-            <h2 style={styles.sectionTitle}>Invitations I am helping with</h2>
-
-            {sharedInvitations.length === 0 && (
-              <p style={styles.subtitle}>
-                No invited instance linked to your account yet.
-              </p>
-            )}
-
-            {sharedInvitations.length > 0 && (
-              <section style={styles.grid}>
-                {sharedInvitations.map((invitation) => (
-                  <article
-                    key={invitation.invitationId}
-                    style={styles.card}
-                    onClick={() => openSharedInvitation(invitation.inviteToken)}
-                  >
-                    <div style={styles.cardHeader}>
-                      <h2 style={styles.cardTitle}>
-                        Shared instance
-                      </h2>
-
-                      {renderProgress({
-                        percent: invitation.percent,
-                        answered: invitation.answered,
-                        total: invitation.total
-                      })}
-                    </div>
-
-                    <p style={styles.cardDescription}>
-                      {invitation.recipientLabel
-                        ? `Label: ${invitation.recipientLabel}`
-                        : "You were invited to complete selected fields."}
-                    </p>
-                  </article>
-                ))}
-              </section>
-            )}
           </>
         )}
 
-        {!activeSharedToken && !isReceivedAnswersOpen && !isAccountSharingOpen && selectedCategory && !selectedSubcategory && (
+        {!isAccountSharingOpen && selectedCategory && !selectedSubcategory && (
           <>
             <button style={styles.backBtn} onClick={goBack}>
               ← Back to dashboard
@@ -658,7 +581,7 @@ export default function Dashboard({ token, onLogout }) {
           </>
         )}
 
-        {!activeSharedToken && !isReceivedAnswersOpen && !isAccountSharingOpen && selectedCategory && selectedSubcategory && (
+        {!isAccountSharingOpen && selectedCategory && selectedSubcategory && (
           <>
             <button style={styles.backBtn} onClick={goBack}>
               ← Back to {selectedCategory.title}

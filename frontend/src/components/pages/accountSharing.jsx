@@ -154,7 +154,7 @@ export default function AccountSharing({
   dashboardCategories,
   pageQuestions
 }) {
-  const [recipientEmail, setRecipientEmail] = useState("");
+  const [recipientLabel, setRecipientLabel] = useState("");
   const [selectedQuestions, setSelectedQuestions] = useState({});
   const [shareLink, setShareLink] = useState("");
   const [isCreatingLink, setIsCreatingLink] = useState(false);
@@ -280,11 +280,6 @@ export default function AccountSharing({
 
     const fields = Object.values(selectedQuestions);
 
-    if (!recipientEmail.trim()) {
-      setError("Please enter the recipient email.");
-      return;
-    }
-
     if (fields.length === 0) {
       setError("Please select at least one question.");
       return;
@@ -300,7 +295,7 @@ export default function AccountSharing({
           Authorization: `Bearer ${token}`
         },
         body: JSON.stringify({
-          recipientEmail,
+          recipientLabel: recipientLabel,
           fields
         })
       });
@@ -337,17 +332,17 @@ export default function AccountSharing({
       </p>
 
       <div style={styles.form}>
-        <label style={styles.label} htmlFor="recipientEmail">
-          Recipient email
+        <label style={styles.label} htmlFor="recipientLabel">
+          Recipient label
         </label>
 
         <input
-          id="recipientEmail"
+          id="recipientLabel"
           style={styles.input}
-          type="email"
-          value={recipientEmail}
-          onChange={(event) => setRecipientEmail(event.target.value)}
-          placeholder="example@email.com"
+          type="text"
+          value={recipientLabel}
+          onChange={(event) => setRecipientLabel(event.target.value)}
+          placeholder="Example: brother, sister, notary, friend..."
         />
       </div>
 
