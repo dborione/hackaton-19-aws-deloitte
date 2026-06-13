@@ -87,16 +87,6 @@ function decodeJwtPayload(token) {
   }
 }
 
-function getJwtPayload(event) {
-  const authorization = getHeader(event, "authorization");
-
-  if (!authorization.startsWith("Bearer ")) {
-    return {};
-  }
-
-  return decodeJwtPayload(authorization.slice("Bearer ".length));
-}
-
 function getUserId(event) {
   const claims =
     event.requestContext?.authorizer?.jwt?.claims ||
@@ -119,15 +109,21 @@ function getUserId(event) {
     return claims.email;
   }
 
-  const payload = getJwtPayload(event);
+  const authorization = getHeader(event, "authorization");
 
-  return (
-    payload.sub ||
-    payload["cognito:username"] ||
-    payload.username ||
-    payload.email ||
-    null
-  );
+  if (authorization.startsWith("Bearer ")) {
+    const payload = decodeJwtPayload(authorization.slice("Bearer ".length));
+
+    return (
+      payload.sub ||
+      payload["cognito:username"] ||
+      payload.username ||
+      payload.email ||
+      null
+    );
+  }
+
+  return null;
 }
 
 function stringParam(name, value) {
@@ -159,7 +155,7 @@ function fieldValue(field) {
 }
 
 async function execute(sql, parameters = []) {
-  return client.send(
+  const result = await client.send(
     new ExecuteStatementCommand({
       resourceArn: DB_CLUSTER_ARN,
       secretArn: DB_SECRET_ARN,
@@ -168,6 +164,8 @@ async function execute(sql, parameters = []) {
       parameters
     })
   );
+
+  return result;
 }
 
 async function createInvitation(event) {
@@ -178,12 +176,12 @@ async function createInvitation(event) {
   }
 
   const body = parseBody(event);
-  const recipientEmail = body.recipientEmail || body.recipientLabel || "";
+  const recipientEmail = body.recipientEmail;
   const fields = body.fields;
 
-  if (!Array.isArray(fields) || fields.length === 0) {
+  if (!recipientEmail || !Array.isArray(fields) || fields.length === 0) {
     return response(400, {
-      error: "fields are required"
+      error: "recipientEmail and fields are required"
     });
   }
 
@@ -247,11 +245,9 @@ async function createInvitation(event) {
 }
 
 async function getInvitation(event, inviteToken) {
-  const currentUserId = getUserId(event);
-
   const invitationResult = await execute(
     `
-    SELECT id, owner_user_id, recipient_email, status, invited_user_id, expires_at
+    SELECT id, recipient_email, status, invited_user_id, expires_at
     FROM sharing_invitations
     WHERE invite_token = :inviteToken
     `,
@@ -263,8 +259,8 @@ async function getInvitation(event, inviteToken) {
   }
 
   const row = invitationResult.records[0];
+
   const invitationId = fieldValue(row[0]);
-  const invitedUserId = fieldValue(row[4]);
 
   const fieldsResult = await execute(
     `
@@ -282,42 +278,15 @@ async function getInvitation(event, inviteToken) {
     questionLabel: fieldValue(record[2])
   }));
 
-  let answers = {};
-
-  if (currentUserId && invitedUserId === currentUserId) {
-    const answersResult = await execute(
-      `
-      SELECT page_id, question_id, answer
-      FROM shared_answers
-      WHERE invitation_id = :invitationId
-        AND invited_user_id = :invitedUserId
-      `,
-      [
-        longParam("invitationId", invitationId),
-        stringParam("invitedUserId", currentUserId)
-      ]
-    );
-
-    for (const record of answersResult.records || []) {
-      const pageId = fieldValue(record[0]);
-      const questionId = fieldValue(record[1]);
-      const answer = fieldValue(record[2]);
-
-      answers[`${pageId}:${questionId}`] = answer;
-    }
-  }
-
   return response(200, {
     invitation: {
       id: invitationId,
-      ownerUserId: fieldValue(row[1]),
-      recipientLabel: fieldValue(row[2]),
-      status: fieldValue(row[3]),
-      invitedUserId,
-      expiresAt: fieldValue(row[5])
+      recipientEmail: fieldValue(row[1]),
+      status: fieldValue(row[2]),
+      invitedUserId: fieldValue(row[3]),
+      expiresAt: fieldValue(row[4])
     },
-    fields,
-    answers
+    fields
   });
 }
 
@@ -328,46 +297,29 @@ async function acceptInvitation(event, inviteToken) {
     return response(401, { error: "Unauthorized" });
   }
 
-  const existingResult = await execute(
-    `
-    SELECT id, invited_user_id
-    FROM sharing_invitations
-    WHERE invite_token = :inviteToken
-    `,
-    [stringParam("inviteToken", inviteToken)]
-  );
-
-  if (!existingResult.records || existingResult.records.length === 0) {
-    return response(404, { error: "Invitation not found" });
-  }
-
-  const invitationId = fieldValue(existingResult.records[0][0]);
-  const linkedInvitedUserId = fieldValue(existingResult.records[0][1]);
-
-  if (linkedInvitedUserId && linkedInvitedUserId !== invitedUserId) {
-    return response(403, {
-      error: "This invitation belongs to another user"
-    });
-  }
-
-  await execute(
+  const result = await execute(
     `
     UPDATE sharing_invitations
     SET
       status = 'accepted',
       invited_user_id = :invitedUserId,
-      accepted_at = COALESCE(accepted_at, CURRENT_TIMESTAMP)
-    WHERE id = :invitationId
+      accepted_at = CURRENT_TIMESTAMP
+    WHERE invite_token = :inviteToken
+    RETURNING id
     `,
     [
       stringParam("invitedUserId", invitedUserId),
-      longParam("invitationId", invitationId)
+      stringParam("inviteToken", inviteToken)
     ]
   );
 
+  if (!result.records || result.records.length === 0) {
+    return response(404, { error: "Invitation not found" });
+  }
+
   return response(200, {
     success: true,
-    invitationId
+    invitationId: fieldValue(result.records[0][0])
   });
 }
 
@@ -519,7 +471,7 @@ async function getReceivedAnswers(event) {
 
   const sharedAnswers = (result.records || []).map((record) => ({
     invitationId: fieldValue(record[0]),
-    recipientLabel: fieldValue(record[1]),
+    recipientEmail: fieldValue(record[1]),
     status: fieldValue(record[2]),
     pageId: fieldValue(record[3]),
     questionId: fieldValue(record[4]),
@@ -529,67 +481,6 @@ async function getReceivedAnswers(event) {
   }));
 
   return response(200, { sharedAnswers });
-}
-
-async function getMyInvitations(event) {
-  const invitedUserId = getUserId(event);
-
-  if (!invitedUserId) {
-    return response(401, { error: "Unauthorized" });
-  }
-
-  const result = await execute(
-    `
-    SELECT
-      si.id,
-      si.invite_token,
-      si.owner_user_id,
-      si.recipient_email,
-      si.status,
-      si.created_at,
-      si.accepted_at,
-      COUNT(sif.id),
-      COUNT(NULLIF(sa.answer, ''))
-    FROM sharing_invitations si
-    JOIN sharing_invitation_fields sif
-      ON sif.invitation_id = si.id
-    LEFT JOIN shared_answers sa
-      ON sa.invitation_id = si.id
-      AND sa.page_id = sif.page_id
-      AND sa.question_id = sif.question_id
-    WHERE si.invited_user_id = :invitedUserId
-    GROUP BY
-      si.id,
-      si.invite_token,
-      si.owner_user_id,
-      si.recipient_email,
-      si.status,
-      si.created_at,
-      si.accepted_at
-    ORDER BY si.accepted_at DESC NULLS LAST, si.created_at DESC
-    `,
-    [stringParam("invitedUserId", invitedUserId)]
-  );
-
-  const invitations = (result.records || []).map((record) => {
-    const total = Number(fieldValue(record[7]) || 0);
-    const answered = Number(fieldValue(record[8]) || 0);
-
-    return {
-      invitationId: fieldValue(record[0]),
-      inviteToken: fieldValue(record[1]),
-      ownerUserId: fieldValue(record[2]),
-      recipientLabel: fieldValue(record[3]),
-      status: fieldValue(record[4]),
-      createdAt: fieldValue(record[5]),
-      acceptedAt: fieldValue(record[6]),
-      total,
-      answered,
-      percent: total === 0 ? 0 : Math.round((answered / total) * 100)
-    };
-  });
-
-  return response(200, { invitations });
 }
 
 async function tryHandleSharingRoute(event) {
@@ -606,10 +497,6 @@ async function tryHandleSharingRoute(event) {
 
   if (method === "GET" && path.endsWith("/sharing/received-answers")) {
     return getReceivedAnswers(event);
-  }
-
-  if (method === "GET" && path.endsWith("/sharing/my-invitations")) {
-    return getMyInvitations(event);
   }
 
   const invitationMatch = path.match(/\/sharing\/invitations\/([^/]+)$/);
