@@ -166,11 +166,24 @@ resource "aws_lambda_permission" "api_gw" {
 resource "aws_api_gateway_deployment" "api" {
   rest_api_id = aws_api_gateway_rest_api.api.id
 
+  triggers = {
+    redeployment = sha1(jsonencode([
+      aws_api_gateway_integration.documents_get.id,
+      aws_api_gateway_integration.documents_options.id,
+      aws_api_gateway_integration.document_id_get.id,
+      aws_api_gateway_integration.document_id_options.id,
+      aws_api_gateway_integration_response.documents_options.id,
+      aws_api_gateway_integration_response.document_id_options.id,
+    ]))
+  }
+
   depends_on = [
     aws_api_gateway_integration.documents_get,
     aws_api_gateway_integration.documents_options,
     aws_api_gateway_integration.document_id_get,
     aws_api_gateway_integration.document_id_options,
+    aws_api_gateway_integration_response.documents_options,
+    aws_api_gateway_integration_response.document_id_options,
   ]
 
   lifecycle {

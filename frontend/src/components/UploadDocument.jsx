@@ -14,9 +14,9 @@ const styles = {
 };
 
 export default function UploadDocument({ token }) {
-  const [file, setFile]       = useState(null);
-  const [status, setStatus]   = useState("");
-  const [error, setError]     = useState("");
+  const [file, setFile] = useState(null);
+  const [status, setStatus] = useState("");
+  const [error, setError] = useState("");
   const [dragging, setDragging] = useState(false);
   const inputRef = useRef();
 
@@ -53,6 +53,7 @@ export default function UploadDocument({ token }) {
 
       setStatus(`✅ "${file.name}" uploadé avec succès — traitement en cours...`);
       setFile(null);
+      setTimeout(() => setStatus(""), 5000);
     } catch (err) {
       setError(`Erreur : ${err.message}`);
       setStatus("");
@@ -79,7 +80,7 @@ export default function UploadDocument({ token }) {
 
       {file && <button style={styles.btn} onClick={handleUpload}>Envoyer</button>}
       {status && <p style={styles.progress}>{status}</p>}
-      {error  && <p style={styles.error}>{error}</p>}
+      {error && <p style={styles.error}>{error}</p>}
     </div>
   );
 }

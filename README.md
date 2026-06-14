@@ -50,10 +50,9 @@ Application de gestion de documents pour franchises. Les utilisateurs uploadent 
                 ▼
   ┌─────────────────────────────────────┐
   │  Lambda: document-processor         │  (Node.js 18, VPC privé)
-  │  1. AnalyzeDocument (Textract)      │
-  │     → FORMS + TABLES + raw text     │
-  │  2. DELETE fichier S3               │
-  │  3. INSERT résultats → Aurora       │
+  │  1. StartDocumentAnalysis (Async)   │  → Support PDF + Images
+  │  2. DELETE fichier S3 (après succes)│
+  │  3. INSERT résultats → Aurora (::jsonb)│
   └─────────────────────────────────────┘
 ```
 
@@ -72,7 +71,7 @@ Application de gestion de documents pour franchises. Les utilisateurs uploadent 
 | **KMS** | Chiffrement RDS + SNS |
 | **Secrets Manager** | Mot de passe Aurora (géré automatiquement) |
 | **VPC** | Isolation réseau — Lambdas et RDS en subnet privé, sans NAT |
-| **VPC Endpoints** | S3 (Gateway), Textract (Interface), Secrets Manager (Interface) |
+| **VPC Endpoints** | S3 (Gateway), Textract, Secrets Manager, RDS Data, Logs (Interface) |
 | **CloudWatch + SNS** | Alarme sur erreurs Lambda → notification SNS |
 
 ### Réseau
@@ -139,7 +138,7 @@ Aucun NAT Gateway — tout le trafic vers AWS passe par VPC endpoints privés.
 
 - [Terraform](https://developer.hashicorp.com/terraform/install) >= 1.0.0
 - [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html) configuré (`aws configure`)
-- [Node.js](https://nodejs.org/) >= 18.x et npm
+- [Node.js](https://nodejs.org/) >= 20.x
 - Droits IAM suffisants : Lambda, RDS, S3, Cognito, CloudFront, API Gateway, VPC, KMS, IAM
 
 ---
@@ -314,10 +313,10 @@ aws cognito-idp admin-set-user-password \
 
 ## Points d'attention connus
 
-- **Upload S3 depuis le browser** : le SDK AWS S3 browser requiert un `Blob` comme `Body` — `Uint8Array` et `File` natif provoquent une erreur `getReader is not a function`.
-- **CORS** : la méthode `OPTIONS` sur API Gateway est configurée sans authentification pour permettre le preflight. La Lambda retourne les headers `Access-Control-Allow-Methods` et `Access-Control-Allow-Headers` sur toutes les réponses.
-- **Aurora Serverless v2** : utilise `engine_mode = "provisioned"` (requis pour Serverless v2), pas `serverless`. La version `16.6` est la plus récente disponible en `us-west-2` au moment du déploiement.
-- **VPC sans NAT** : tout le trafic sortant des Lambdas vers AWS passe par VPC endpoints. Ajouter un NAT Gateway si une dépendance externe (internet) est nécessaire.
+- **Upload S3 depuis le browser** : le SDK AWS S3 browser nécessite l'utilisation de `Uint8Array` ou `Blob` pour le corps du fichier afin d'éviter les erreurs de polyfills.
+- **CORS** : Les méthodes `OPTIONS` sur API Gateway sont gérées via une **Intégration MOCK** pour une réponse robuste et rapide, indépendante des Lambdas.
+- **Support PDF** : La Lambda `document-processor` utilise l'API **asynchrone** (`StartDocumentAnalysis`) pour supporter les PDF multi-pages, avec un mécanisme de polling interne.
+- **VPC sans NAT** : Un endpoint `com.amazonaws.region.logs` est indispensable pour voir les logs CloudWatch des Lambdas privées.
 
 ---
 

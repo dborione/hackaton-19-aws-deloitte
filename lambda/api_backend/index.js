@@ -129,6 +129,8 @@ exports.handler = async (event) => {
         `
       }));
 
+      console.log("RDS List results:", JSON.stringify(result.records));
+
       const documents = (result.records || []).map(row => ({
         id: row[0].longValue,
         file_key: row[1].stringValue,
