@@ -92,7 +92,7 @@ const styles = {
 
   card: {
     background: "#fff",
-    border: "1px solid #ddd",
+    border: "1px solid #bd2430",
     borderRadius: 8,
     padding: 20,
     cursor: "pointer"
@@ -146,7 +146,7 @@ const styles = {
 
   emptyBox: {
     background: "#fff",
-    border: "1px dashed #bd2430",
+    border: "1px dashed #aaa",
     borderRadius: 8,
     padding: 32,
     textAlign: "center",
