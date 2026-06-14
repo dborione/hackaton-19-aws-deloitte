@@ -24,7 +24,7 @@ export default function Login({ onLogin, onGoRegister }) {
     try {
       await onLogin(username, password);
     } catch (err) {
-      setError(err.message || "Erreur de connexion");
+      setError(err.message || "Login failed");
     } finally {
       setLoading(false);
     }
@@ -33,22 +33,22 @@ export default function Login({ onLogin, onGoRegister }) {
   return (
     <div style={styles.container}>
       <div style={styles.card}>
-        <h1 style={styles.title}>A&G Funeral</h1>
-        <p style={styles.subtitle}>Connectez-vous pour accéder à votre espace</p>
+        <h1 style={styles.title}>A&G Funerals</h1>
+        <p style={styles.subtitle}>Sign in to access your account</p>
         {error && <div style={styles.error}>{error}</div>}
         <form onSubmit={handleSubmit}>
           <label style={styles.label}>Email</label>
           <input style={styles.input} type="email" value={username} onChange={e => setUsername(e.target.value)} autoComplete="email" required />
-          <label style={styles.label}>Mot de passe</label>
+          <label style={styles.label}>Password</label>
           <input style={styles.input} type="password" value={password} onChange={e => setPassword(e.target.value)} autoComplete="current-password" required />
           <button style={styles.btn} type="submit" disabled={loading}>
-            {loading ? "Connexion..." : "Se connecter"}
+            {loading ? "Signing in..." : "Sign in"}
           </button>
         </form>
         <div style={{ marginTop: 16, textAlign: "center", fontSize: 14, color: "#666" }}>
-          Pas encore de compte ?{" "}
+          Don't have an account yet?{" "}
           <button style={{ color: "#bd2430", background: "none", border: "none", cursor: "pointer", fontWeight: "bold", fontSize: 14 }} onClick={onGoRegister}>
-            S'inscrire
+            Sign up
           </button>
         </div>
       </div>

@@ -55,7 +55,7 @@ export default function UploadDocument({ token }) {
       setFile(null);
       setTimeout(() => setStatus(""), 5000);
     } catch (err) {
-      setError(`Erreur : ${err.message}`);
+      setError(`Error : ${err.message}`);
       setStatus("");
     }
   };

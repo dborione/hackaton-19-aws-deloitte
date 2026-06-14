@@ -44,11 +44,11 @@ export default function Register({ onRegister, onConfirm, onGoLogin }) {
     setError("");
 
     if (!PASSWORD_REGEX.test(password)) {
-      setError("Le mot de passe doit contenir au moins 8 caractères, une majuscule, un chiffre et un symbole (!@#$%^&*).");
+      setError("Password must contain at least 8 characters, one uppercase letter, one number, and one symbol (!@#$%^&*).");
       return;
     }
     if (password !== confirm) {
-      setError("Les mots de passe ne correspondent pas.");
+      setError("Passwords do not match.");
       return;
     }
 
@@ -56,9 +56,9 @@ export default function Register({ onRegister, onConfirm, onGoLogin }) {
     try {
       await onRegister(email, password);
       setStep("confirm");
-      setSuccess("Un code de vérification a été envoyé à votre email.");
+      setSuccess("A verification code has been sent to your email.");
     } catch (err) {
-      setError(err.message || "Erreur lors de l'inscription.");
+      setError(err.message || "Registration failed.");
     } finally {
       setLoading(false);
     }
@@ -70,10 +70,10 @@ export default function Register({ onRegister, onConfirm, onGoLogin }) {
     setLoading(true);
     try {
       await onConfirm(email, code.trim());
-      setSuccess("Compte vérifié ! Vous pouvez maintenant vous connecter.");
+      setSuccess("Account verified! You can now sign in.");
       setTimeout(onGoLogin, 1500);
     } catch (err) {
-      setError(err.message || "Code invalide ou expiré.");
+      setError(err.message || "Invalid or expired code.");
     } finally {
       setLoading(false);
     }
@@ -82,9 +82,9 @@ export default function Register({ onRegister, onConfirm, onGoLogin }) {
   return (
     <div style={styles.container}>
       <div style={styles.card}>
-        <h1 style={styles.title}>Créer un compte</h1>
+        <h1 style={styles.title}>Create an account</h1>
         <p style={styles.subtitle}>
-          {step === "form" ? "Remplissez le formulaire pour vous inscrire" : "Entrez le code reçu par email"}
+          {step === "form" ? "Fill out the form to create your account" : "Enter the code received by email"}
         </p>
 
         {error   && <div style={styles.error}>{error}</div>}
@@ -102,7 +102,7 @@ export default function Register({ onRegister, onConfirm, onGoLogin }) {
               required
             />
 
-            <label style={styles.label}>Mot de passe</label>
+            <label style={styles.label}>Password</label>
             <input
               style={styles.input}
               type="password"
@@ -112,9 +112,9 @@ export default function Register({ onRegister, onConfirm, onGoLogin }) {
               required
             />
             <div style={styles.strength(strength)} />
-            <p style={styles.hint}>Min. 8 caractères, 1 majuscule, 1 chiffre, 1 symbole</p>
+            <p style={styles.hint}>Min. 8 characters, 1 uppercase letter, 1 number, 1 symbol</p>
 
-            <label style={styles.label}>Confirmer le mot de passe</label>
+            <label style={styles.label}>Confirm password</label>
             <input
               style={styles.input}
               type="password"
@@ -125,12 +125,12 @@ export default function Register({ onRegister, onConfirm, onGoLogin }) {
             />
 
             <button style={styles.btn} type="submit" disabled={loading}>
-              {loading ? "Inscription..." : "S'inscrire"}
+              {loading ? "Signing up..." : "Sign up"}
             </button>
           </form>
         ) : (
           <form onSubmit={handleConfirm}>
-            <label style={styles.label}>Code de vérification</label>
+            <label style={styles.label}>Verification code</label>
             <input
               style={styles.input}
               type="text"
@@ -142,14 +142,14 @@ export default function Register({ onRegister, onConfirm, onGoLogin }) {
               required
             />
             <button style={styles.btn} type="submit" disabled={loading}>
-              {loading ? "Vérification..." : "Confirmer"}
+              {loading ? "Verifying..." : "Confirm"}
             </button>
           </form>
         )}
 
         <div style={styles.link}>
-          Déjà un compte ?{" "}
-          <button style={styles.linkBtn} onClick={onGoLogin}>Se connecter</button>
+          Already have an account?{" "}
+          <button style={styles.linkBtn} onClick={onGoLogin}>Sign in</button>
         </div>
       </div>
     </div>
