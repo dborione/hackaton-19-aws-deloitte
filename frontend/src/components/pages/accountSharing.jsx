@@ -85,8 +85,8 @@ const styles = {
 
   smallButton: {
     background: "#f3f4f6",
-    color: "#4f4f4f",
-    border: "1px solid #4f4f4f",
+    color: "#bd2430",
+    border: "1px solid #bd2430",
     padding: "6px 10px",
     borderRadius: 6,
     cursor: "pointer",

@@ -136,8 +136,8 @@ const styles = {
 
   backBtn: {
     background: "transparent",
-    color: "#4f4f4f",
-    border: "1px solid #4f4f4f",
+    color: "#bd2430",
+    border: "1px solid #bd2430",
     padding: "8px 14px",
     borderRadius: 4,
     cursor: "pointer",
@@ -146,7 +146,7 @@ const styles = {
 
   emptyBox: {
     background: "#fff",
-    border: "1px dashed #aaa",
+    border: "1px dashed #bd2430",
     borderRadius: 8,
     padding: 32,
     textAlign: "center",

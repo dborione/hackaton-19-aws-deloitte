@@ -212,7 +212,7 @@ const styles = {
     cardDesc: { fontSize: 13, opacity: 0.85, lineHeight: 1.4 },
     cardBadge: { position: "absolute", top: 12, right: 12, background: "rgba(255,255,255,0.25)", borderRadius: 999, padding: "2px 8px", fontSize: 11, fontWeight: "bold" },
     uploadArea: { background: "#fff", borderRadius: 12, boxShadow: "0 2px 12px rgba(0,0,0,0.08)", padding: 28 },
-    backBtn: { background: "transparent", color: "#4f4f4f", border: "1px solid #ddd", borderRadius: 6, padding: "8px 14px", cursor: "pointer", marginBottom: 20, fontSize: 14 },
+    backBtn: { background: "transparent", color: "#bd2430", border: "1px solid #bd2430", borderRadius: 6, padding: "8px 14px", cursor: "pointer", marginBottom: 20, fontSize: 14 },
     dropzone: { border: "2px dashed #ddd", borderRadius: 10, padding: 40, textAlign: "center", cursor: "pointer", color: "#888", transition: "all .2s" },
     dropActive: { borderColor: "#4f46e5", background: "#f5f3ff" },
     uploadBtn: { display: "inline-block", marginTop: 16, padding: "10px 28px", borderRadius: 6, border: "none", fontWeight: "bold", fontSize: 15, cursor: "pointer", color: "#fff" },
