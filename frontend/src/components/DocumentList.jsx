@@ -9,26 +9,26 @@ const CATEGORIES = {
 
 const styles = {
   section:    { background: "#fff", borderRadius: 8, padding: 24, boxShadow: "0 1px 4px rgba(0,0,0,0.08)", marginTop: 24 },
-  title:      { fontSize: 18, fontWeight: "bold", marginBottom: 16, color: "#232f3e" },
+  title:      { fontSize: 18, fontWeight: "bold", marginBottom: 16, color: "#4f4f4f" },
   table:      { width: "100%", borderCollapse: "collapse" },
   th:         { textAlign: "left", padding: "10px 12px", background: "#f0f2f5", borderBottom: "2px solid #ddd", fontSize: 13 },
   td:         { padding: "12px 12px", borderBottom: "1px solid #eee", fontSize: 13 },
-  btn:        { background: "#232f3e", color: "#fff", border: "none", padding: "6px 12px", borderRadius: 4, cursor: "pointer", fontSize: 12 },
+  btn:        { background: "#4f4f4f", color: "#fff", border: "none", padding: "6px 12px", borderRadius: 4, cursor: "pointer", fontSize: 12 },
   btnSmall:   { background: "#555", color: "#fff", border: "none", padding: "4px 8px", borderRadius: 3, cursor: "pointer", fontSize: 11 },
   empty:      { textAlign: "center", color: "#999", padding: 32 },
   modal:      { position: "fixed", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(0,0,0,0.5)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 100 },
   modalCard:  { background: "#fff", borderRadius: 8, padding: 32, maxWidth: 900, width: "95%", maxHeight: "90vh", overflow: "auto" },
   pre:        { background: "#f0f2f5", padding: 12, borderRadius: 4, fontSize: 11, whiteSpace: "pre-wrap", marginTop: 8 },
-  sectionLbl: { fontWeight: "bold", fontSize: 14, marginTop: 20, marginBottom: 12, color: "#fff", background: "#232f3e", padding: "8px 12px", borderRadius: 4, display: "flex", alignItems: "center", gap: 8 },
+  sectionLbl: { fontWeight: "bold", fontSize: 14, marginTop: 20, marginBottom: 12, color: "#fff", background: "#4f4f4f", padding: "8px 12px", borderRadius: 4, display: "flex", alignItems: "center", gap: 8 },
   categoryBadge: { display: "inline-block", padding: "4px 10px", borderRadius: 12, fontSize: 12, fontWeight: "bold", color: "#fff", marginRight: 8 },
   kvRow:      { display: "grid", gridTemplateColumns: "200px 1fr", gap: 12, marginBottom: 8, fontSize: 13, padding: "8px 12px", background: "#f9f9f9", borderRadius: 4 },
-  kvKey:      { fontWeight: "bold", color: "#232f3e" },
+  kvKey:      { fontWeight: "bold", color: "#4f4f4f" },
   kvVal:      { color: "#333" },
   catSection: { marginTop: 20, border: "1px solid #ddd", borderRadius: 6, padding: 16, background: "#fafafa" },
-  catHeader:  { fontWeight: "bold", fontSize: 14, marginBottom: 12, color: "#232f3e", borderBottom: "2px solid", paddingBottom: 8 },
+  catHeader:  { fontWeight: "bold", fontSize: 14, marginBottom: 12, color: "#4f4f4f", borderBottom: "2px solid", paddingBottom: 8 },
   tblWrap:    { overflowX: "auto", marginTop: 8, marginBottom: 16 },
   tblTable:   { borderCollapse: "collapse", fontSize: 12, width: "100%" },
-  tblTh:      { background: "#232f3e", color: "#fff", padding: "8px 10px", textAlign: "left" },
+  tblTh:      { background: "#4f4f4f", color: "#fff", padding: "8px 10px", textAlign: "left" },
   tblTd:      { border: "1px solid #ddd", padding: "6px 10px" },
   docCard:    { display: "flex", justifyContent: "space-between", alignItems: "center", padding: 12, background: "#f9f9f9", borderRadius: 4, marginBottom: 8 },
   stats:      { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 12, marginBottom: 16 }
@@ -150,7 +150,7 @@ export default function DocumentList({ token }) {
             return (
               <div key={doc.id} style={styles.docCard}>
                 <div>
-                  <div style={{ fontWeight: "bold", color: "#232f3e", marginBottom: 4 }}>{doc.file_key}</div>
+                  <div style={{ fontWeight: "bold", color: "#4f4f4f", marginBottom: 4 }}>{doc.file_key}</div>
                   <div style={{ fontSize: 12, color: "#666" }}>
                     {new Date(doc.processed_at).toLocaleString("en-US")} • 
                     {stats.formCount > 0 && ` ${stats.formCount} form field${stats.formCount !== 1 ? "s" : ""}`}
@@ -169,7 +169,7 @@ export default function DocumentList({ token }) {
           <div style={styles.modalCard} onClick={e => e.stopPropagation()}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 20 }}>
               <div>
-                <h3 style={{ margin: "0 0 4px 0", fontSize: 20, color: "#232f3e" }}>{selected.file_key}</h3>
+                <h3 style={{ margin: "0 0 4px 0", fontSize: 20, color: "#4f4f4f" }}>{selected.file_key}</h3>
                 <small style={{ color: "#666" }}>Processed on {new Date(selected.processed_at).toLocaleString("en-US")}</small>
               </div>
               <button style={styles.btnSmall} onClick={() => setSelected(null)}>✕ Close</button>

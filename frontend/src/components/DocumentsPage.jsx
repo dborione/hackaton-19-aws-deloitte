@@ -203,7 +203,7 @@ const DOCUMENT_CATEGORIES = [
 const styles = {
     page: { maxWidth: 900, margin: "0 auto", padding: "0 16px 64px" },
     header: { marginBottom: 32, paddingTop: 8 },
-    h1: { fontSize: 28, fontWeight: "bold", color: "#232f3e", margin: "0 0 8px" },
+    h1: { fontSize: 28, fontWeight: "bold", color: "#4f4f4f", margin: "0 0 8px" },
     subtitle: { color: "#555", lineHeight: 1.6 },
     grid: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 16, marginBottom: 32 },
     card: { borderRadius: 12, padding: 20, cursor: "pointer", color: "#fff", transition: "transform .15s, box-shadow .15s", position: "relative", overflow: "hidden" },
@@ -212,7 +212,7 @@ const styles = {
     cardDesc: { fontSize: 13, opacity: 0.85, lineHeight: 1.4 },
     cardBadge: { position: "absolute", top: 12, right: 12, background: "rgba(255,255,255,0.25)", borderRadius: 999, padding: "2px 8px", fontSize: 11, fontWeight: "bold" },
     uploadArea: { background: "#fff", borderRadius: 12, boxShadow: "0 2px 12px rgba(0,0,0,0.08)", padding: 28 },
-    backBtn: { background: "transparent", color: "#232f3e", border: "1px solid #ddd", borderRadius: 6, padding: "8px 14px", cursor: "pointer", marginBottom: 20, fontSize: 14 },
+    backBtn: { background: "transparent", color: "#4f4f4f", border: "1px solid #ddd", borderRadius: 6, padding: "8px 14px", cursor: "pointer", marginBottom: 20, fontSize: 14 },
     dropzone: { border: "2px dashed #ddd", borderRadius: 10, padding: 40, textAlign: "center", cursor: "pointer", color: "#888", transition: "all .2s" },
     dropActive: { borderColor: "#4f46e5", background: "#f5f3ff" },
     uploadBtn: { display: "inline-block", marginTop: 16, padding: "10px 28px", borderRadius: 6, border: "none", fontWeight: "bold", fontSize: 15, cursor: "pointer", color: "#fff" },
@@ -568,7 +568,7 @@ export default function DocumentsPage({ token, onBack }) {
 
         return (
             <div key={title} style={{ marginTop: 20, border: "1px solid #ddd", borderRadius: 6, padding: 16, background: "#fafafa" }}>
-                <div style={{ fontWeight: "bold", fontSize: 14, marginBottom: 12, color: "#232f3e", borderBottom: `2px solid ${color}`, paddingBottom: 8, paddingLeft: 12, display: "flex", alignItems: "center", gap: 8 }}>
+                <div style={{ fontWeight: "bold", fontSize: 14, marginBottom: 12, color: "#4f4f4f", borderBottom: `2px solid ${color}`, paddingBottom: 8, paddingLeft: 12, display: "flex", alignItems: "center", gap: 8 }}>
                     <span>{icon}</span>
                     <span>{title}</span>
                     <span style={{ marginLeft: "auto", background: color, color: "#fff", borderRadius: 12, padding: "2px 10px", fontSize: 11, fontWeight: "bold" }}>
@@ -577,7 +577,7 @@ export default function DocumentsPage({ token, onBack }) {
                 </div>
                 {entries.map(([k, v]) => (
                     <div key={k} style={{ display: "grid", gridTemplateColumns: "200px 1fr", gap: 12, marginBottom: 8, fontSize: 13, padding: "8px 12px", background: "#f9f9f9", borderRadius: 4 }}>
-                        <span style={{ fontWeight: "bold", color: "#232f3e" }}>{k}</span>
+                        <span style={{ fontWeight: "bold", color: "#4f4f4f" }}>{k}</span>
                         <span style={{ color: "#333" }}>{v || <em style={{ color: "#aaa" }}>empty</em>}</span>
                     </div>
                 ))}
@@ -619,7 +619,7 @@ export default function DocumentsPage({ token, onBack }) {
                     onClick={() => setTab("upload")}
                     style={{
                         padding: "12px 16px",
-                        background: tab === "upload" ? "#232f3e" : "transparent",
+                        background: tab === "upload" ? "#4f4f4f" : "transparent",
                         color: tab === "upload" ? "#fff" : "#555",
                         border: "none",
                         cursor: "pointer",
@@ -635,7 +635,7 @@ export default function DocumentsPage({ token, onBack }) {
                     onClick={() => setTab("processed")}
                     style={{
                         padding: "12px 16px",
-                        background: tab === "processed" ? "#232f3e" : "transparent",
+                        background: tab === "processed" ? "#4f4f4f" : "transparent",
                         color: tab === "processed" ? "#fff" : "#555",
                         border: "none",
                         cursor: "pointer",
@@ -686,7 +686,7 @@ export default function DocumentsPage({ token, onBack }) {
                             {selected.icon}
                         </div>
                         <div>
-                            <h2 style={{ margin: "0 0 4px", fontSize: 22, color: "#232f3e" }}>{selected.title}</h2>
+                            <h2 style={{ margin: "0 0 4px", fontSize: 22, color: "#4f4f4f" }}>{selected.title}</h2>
                             <p style={{ margin: 0, color: "#888", fontSize: 14 }}>{selected.description}</p>
                         </div>
                     </div>
@@ -703,8 +703,8 @@ export default function DocumentsPage({ token, onBack }) {
             {tab === "processed" && (
                 <div>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
-                        <h2 style={{ fontSize: 18, fontWeight: "bold", margin: 0, color: "#232f3e" }}>Processed Documents</h2>
-                        <button style={{ background: "#232f3e", color: "#fff", border: "none", padding: "6px 12px", borderRadius: 4, cursor: "pointer", fontSize: 12 }} onClick={fetchDocuments}>
+                        <h2 style={{ fontSize: 18, fontWeight: "bold", margin: 0, color: "#4f4f4f" }}>Processed Documents</h2>
+                        <button style={{ background: "#4f4f4f", color: "#fff", border: "none", padding: "6px 12px", borderRadius: 4, cursor: "pointer", fontSize: 12 }} onClick={fetchDocuments}>
                             Refresh
                         </button>
                     </div>
@@ -720,14 +720,14 @@ export default function DocumentsPage({ token, onBack }) {
                                 return (
                                     <div key={doc.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: 12, background: "#f9f9f9", borderRadius: 4, marginBottom: 8 }}>
                                         <div>
-                                            <div style={{ fontWeight: "bold", color: "#232f3e", marginBottom: 4 }}>{doc.file_key}</div>
+                                            <div style={{ fontWeight: "bold", color: "#4f4f4f", marginBottom: 4 }}>{doc.file_key}</div>
                                             <div style={{ fontSize: 12, color: "#666" }}>
                                                 {new Date(doc.processed_at).toLocaleString("en-US")} • 
                                                 {stats.formCount > 0 && ` ${stats.formCount} form field${stats.formCount !== 1 ? "s" : ""}`}
                                                 {stats.tableCount > 0 && ` • ${stats.tableCount} table${stats.tableCount !== 1 ? "s" : ""}`}
                                             </div>
                                         </div>
-                                        <button style={{ background: "#232f3e", color: "#fff", border: "none", padding: "6px 12px", borderRadius: 4, cursor: "pointer", fontSize: 12 }} onClick={() => fetchDetail(doc.id)}>
+                                        <button style={{ background: "#4f4f4f", color: "#fff", border: "none", padding: "6px 12px", borderRadius: 4, cursor: "pointer", fontSize: 12 }} onClick={() => fetchDetail(doc.id)}>
                                             View Details
                                         </button>
                                     </div>
@@ -742,7 +742,7 @@ export default function DocumentsPage({ token, onBack }) {
                             <div style={{ background: "#fff", borderRadius: 8, padding: 32, maxWidth: 900, width: "95%", maxHeight: "90vh", overflow: "auto" }} onClick={e => e.stopPropagation()}>
                                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 20 }}>
                                     <div>
-                                        <h3 style={{ margin: "0 0 4px 0", fontSize: 20, color: "#232f3e" }}>{selectedDetail.file_key}</h3>
+                                        <h3 style={{ margin: "0 0 4px 0", fontSize: 20, color: "#4f4f4f" }}>{selectedDetail.file_key}</h3>
                                         <small style={{ color: "#666" }}>Processed on {new Date(selectedDetail.processed_at).toLocaleString("en-US")}</small>
                                     </div>
                                     <button style={{ background: "#555", color: "#fff", border: "none", padding: "4px 8px", borderRadius: 3, cursor: "pointer", fontSize: 11 }} onClick={() => setSelectedDetail(null)}>
@@ -777,7 +777,7 @@ export default function DocumentsPage({ token, onBack }) {
                                             <div key={i} style={{ overflowX: "auto", marginTop: 8, marginBottom: 16 }}>
                                                 <table style={{ borderCollapse: "collapse", fontSize: 12, width: "100%" }}>
                                                     <thead>
-                                                        <tr>{tbl[0]?.map((h, j) => <th key={j} style={{ background: "#232f3e", color: "#fff", padding: "8px 10px", textAlign: "left" }}>{h}</th>)}</tr>
+                                                        <tr>{tbl[0]?.map((h, j) => <th key={j} style={{ background: "#4f4f4f", color: "#fff", padding: "8px 10px", textAlign: "left" }}>{h}</th>)}</tr>
                                                     </thead>
                                                     <tbody>
                                                         {tbl.slice(1).map((row, r) => (

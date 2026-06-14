@@ -35,12 +35,13 @@ import SinglePayment, { questions as singlePaymentQuestions } from "./pages/fina
 
 const styles = {
   nav: {
-    background: "#4f4f4f",
-    color: "#fff",
+    background: "#fff",
+    color: "#4f4f4f",
     padding: "16px 32px",
     display: "flex",
     justifyContent: "space-between",
-    alignItems: "center"
+    alignItems: "center",
+    boxShadow: "0 30px 40px 0 rgba(212,217,232,.25)"
   },
 
   main: {
@@ -50,8 +51,10 @@ const styles = {
   },
 
   btn: {
-    background: "#bd2430",
-    color: "#fff",
+    background: "#fff",
+    textTransform: "uppercase",
+    fontFamily: '"Roboto Condensed", sans-serif',
+    color: "#bd2430",
     border: "none",
     padding: "8px 16px",
     borderRadius: 4,

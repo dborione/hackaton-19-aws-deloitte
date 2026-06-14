@@ -3,7 +3,7 @@ import React, { useState } from "react";
 const styles = {
   container: { minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" },
   card: { background: "#fff", padding: 40, borderRadius: 8, boxShadow: "0 30px 40px 0 rgba(212,217,232,.25)", width: 360 },
-  title: { fontSize: 24, fontWeight: "bold", marginBottom: 8, color: "#232f3e" },
+  title: { fontSize: 24, fontWeight: "bold", marginBottom: 8, color: "#4f4f4f" },
   subtitle: { color: "#666", marginBottom: 24 },
   label: { display: "block", marginBottom: 4, fontWeight: "bold", fontSize: 14 },
   input: { width: "100%", padding: "10px 12px", border: "1px solid #ddd", borderRadius: 4, marginBottom: 16, fontSize: 14 },
