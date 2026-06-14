@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import config from "../config";
+import agLogo from "../../image/AG_Logo2024-CORPORATE-main-1.png";
 
 import AccountSharing from "./pages/accountSharing";
 import SharedInvitation from "./pages/sharedInvitation";
@@ -49,6 +50,21 @@ const styles = {
     maxWidth: 900,
     margin: "32px auto",
     padding: "0 16px"
+  },
+
+  logoButton: {
+    background: "transparent",
+    border: "none",
+    padding: 0,
+    cursor: "pointer",
+    display: "flex",
+    alignItems: "center"
+  },
+
+  logo: {
+    height: 46,
+    width: "auto",
+    display: "block"
   },
 
   btn: {
@@ -553,13 +569,18 @@ export default function Dashboard({ token, onLogout, onNavigate }) {
       </style>
 
       <nav style={styles.nav}>
-        <span
+        <button
           className="nav-brand"
-          style={{ fontSize: 20, fontWeight: "bold", cursor: "pointer" }}
+          style={styles.logoButton}
           onClick={goHomeDashboard}
+          aria-label="Go to dashboard"
         >
-          A&G Funerals
-        </span>
+          <img
+            src={agLogo}
+            alt="A&G Funerals"
+            style={styles.logo}
+          />
+        </button>
 
         <div style={{ display: "flex", gap: 12 }}>
           <button className="nav-action-btn" style={styles.btn} onClick={openAccountSharing}>
