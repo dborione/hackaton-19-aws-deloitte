@@ -696,7 +696,9 @@ export default function Dashboard({ token, onLogout, onNavigate }) {
         {!activeSharedToken && !isReceivedAnswersOpen && !isAccountSharingOpen && !isDocumentsOpen && !selectedCategory && !selectedSubcategory && (
           <>
             <section style={styles.header}>
-              <h1 style={styles.title}>A&G Funeral Dashboard</h1>
+              <h1 style={styles.title}>A
+                <span style={{ color: "#bd2430" }}>&</span>
+                G Funeral Dashboard</h1>
               <p style={styles.subtitle}>
                 Choose your own instance, or open an invited instance where
                 someone shared fields with you.
