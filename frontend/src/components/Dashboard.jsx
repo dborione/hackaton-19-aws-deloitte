@@ -341,6 +341,22 @@ export default function Dashboard({ token, onLogout, onNavigate }) {
     setShareToken(null);
   }
 
+  function goHomeDashboard() {
+    clearShareTokenFromUrl();
+    setSelectedSharedInviteToken(null);
+    setSelectedCategory(null);
+    setSelectedSubcategory(null);
+    setIsAccountSharingOpen(false);
+    setIsReceivedAnswersOpen(false);
+
+    loadProgress();
+    loadSharedInvitations();
+
+    if (onNavigate) {
+      onNavigate("dashboard");
+    }
+  }
+
   function openAccountSharing() {
     clearShareTokenFromUrl();
     setSelectedSharedInviteToken(null);
@@ -438,7 +454,7 @@ export default function Dashboard({ token, onLogout, onNavigate }) {
   function renderProgress(progress) {
     return (
       <div>
-        <span style={styles.progressBadge}>
+        <span className="progress-badge" style={styles.progressBadge}>
           {progress.percent}%
         </span>
 
@@ -455,46 +471,100 @@ export default function Dashboard({ token, onLogout, onNavigate }) {
 
   return (
     <>
+      <style>
+        {`
+          .nav-brand {
+            transition: color 160ms ease;
+          }
+
+          .nav-brand:hover {
+            color: #bd2430 !important;
+          }
+
+          .nav-action-btn {
+            transition:
+              background-color 160ms ease,
+              color 160ms ease,
+              border-color 160ms ease;
+          }
+
+          .nav-action-btn:hover {
+            background-color: #bd2430 !important;
+            color: #fff !important;
+            border-color: #bd2430 !important;
+          }
+        `}
+      </style>
+
+      <style>
+        {`
+          .back-action-btn {
+            transition:
+              background-color 160ms ease,
+              color 160ms ease,
+              border-color 160ms ease;
+          }
+
+          .back-action-btn:hover {
+            background-color: #bd2430 !important;
+            color: #fff !important;
+            border-color: #bd2430 !important;
+          }
+
+          .dashboard-card h2,
+          .dashboard-card p {
+            transition: color 160ms ease;
+          }
+
+          .dashboard-card:hover h2,
+          .dashboard-card:hover p {
+            color: #bd2430 !important;
+          }
+
+          .dashboard-card:hover .progress-badge {
+            color: #fff !important;
+          }
+        `}
+      </style>
+
       <nav style={styles.nav}>
         <span
+          className="nav-brand"
           style={{ fontSize: 20, fontWeight: "bold", cursor: "pointer" }}
-          onClick={() => onNavigate && onNavigate("dashboard")}
+          onClick={goHomeDashboard}
         >
           A&G Funerals
         </span>
 
         <div style={{ display: "flex", gap: 12 }}>
-          <button style={styles.btn} onClick={openAccountSharing}>
+          <button className="nav-action-btn" style={styles.btn} onClick={openAccountSharing}>
             Account sharing
           </button>
 
-          <button style={styles.btn} onClick={openReceivedAnswers}>
+          <button className="nav-action-btn" style={styles.btn} onClick={openReceivedAnswers}>
             Received answers
           </button>
 
           <button
+            className="nav-action-btn"
             style={styles.btn}
             onClick={() => onNavigate && onNavigate("documents")}
           >
             Documents
           </button>
 
-          <button style={styles.btn} onClick={onLogout}>
+          <button className="nav-action-btn" style={styles.btn} onClick={onLogout}>
             Logout
           </button>
         </div>
       </nav>
 
       <main style={styles.main}>
-        {isLoadingProgress && (
-          <p style={styles.subtitle}>
-            Loading progress...
-          </p>
-        )}
+
 
         {activeSharedToken && (
           <>
-            <button style={styles.backBtn} onClick={goBack}>
+            <button className="back-action-btn" style={styles.backBtn} onClick={goBack}>
               ← Back to dashboard
             </button>
 
@@ -519,7 +589,7 @@ export default function Dashboard({ token, onLogout, onNavigate }) {
 
         {!activeSharedToken && isReceivedAnswersOpen && (
           <>
-            <button style={styles.backBtn} onClick={goBack}>
+            <button className="back-action-btn" style={styles.backBtn} onClick={goBack}>
               ← Back to dashboard
             </button>
 
@@ -538,7 +608,7 @@ export default function Dashboard({ token, onLogout, onNavigate }) {
 
         {!activeSharedToken && !isReceivedAnswersOpen && isAccountSharingOpen && (
           <>
-            <button style={styles.backBtn} onClick={goBack}>
+            <button className="back-action-btn" style={styles.backBtn} onClick={goBack}>
               ← Back to dashboard
             </button>
 
@@ -579,6 +649,7 @@ export default function Dashboard({ token, onLogout, onNavigate }) {
                 return (
                   <article
                     key={category.id}
+                    className="dashboard-card"
                     style={styles.card}
                     onClick={() => openCategory(category)}
                   >
@@ -608,6 +679,7 @@ export default function Dashboard({ token, onLogout, onNavigate }) {
                 {sharedInvitations.map((invitation) => (
                   <article
                     key={invitation.invitationId}
+                    className="dashboard-card"
                     style={styles.card}
                     onClick={() => openSharedInvitation(invitation.inviteToken)}
                   >
@@ -637,7 +709,7 @@ export default function Dashboard({ token, onLogout, onNavigate }) {
 
         {!activeSharedToken && !isReceivedAnswersOpen && !isAccountSharingOpen && selectedCategory && !selectedSubcategory && (
           <>
-            <button style={styles.backBtn} onClick={goBack}>
+            <button className="back-action-btn" style={styles.backBtn} onClick={goBack}>
               ← Back to dashboard
             </button>
 
@@ -655,6 +727,7 @@ export default function Dashboard({ token, onLogout, onNavigate }) {
                 return (
                   <article
                     key={subcategory.id}
+                    className="dashboard-card"
                     style={styles.card}
                     onClick={() => openSubcategory(subcategory)}
                   >
@@ -675,7 +748,7 @@ export default function Dashboard({ token, onLogout, onNavigate }) {
 
         {!activeSharedToken && !isReceivedAnswersOpen && !isAccountSharingOpen && selectedCategory && selectedSubcategory && (
           <>
-            <button style={styles.backBtn} onClick={goBack}>
+            <button className="back-action-btn" style={styles.backBtn} onClick={goBack}>
               ← Back to {selectedCategory.title}
             </button>
 
