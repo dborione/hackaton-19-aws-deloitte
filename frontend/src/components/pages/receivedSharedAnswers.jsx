@@ -79,7 +79,7 @@ const styles = {
   },
 
   button: {
-    background: "#ff9900",
+    background: "#bd2430",
     color: "#fff",
     border: "none",
     padding: "10px 16px",
@@ -89,7 +89,7 @@ const styles = {
   },
 
   dangerButton: {
-    background: "#b91c1c",
+    background: "#c0392b",
     color: "#fff",
     border: "none",
     padding: "8px 12px",
@@ -99,7 +99,7 @@ const styles = {
   },
 
   error: {
-    color: "#b91c1c",
+    color: "#c0392b",
     fontWeight: "bold"
   },
 

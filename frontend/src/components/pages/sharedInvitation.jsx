@@ -26,7 +26,7 @@ const styles = {
 
   groupTitle: {
     margin: "0 0 14px 0",
-    color: "#232f3e"
+    color: "#4f4f4f"
   },
 
   field: {
@@ -37,7 +37,7 @@ const styles = {
     display: "block",
     fontWeight: "bold",
     marginBottom: 8,
-    color: "#232f3e"
+    color: "#4f4f4f"
   },
 
   textarea: {
@@ -59,7 +59,7 @@ const styles = {
   },
 
   button: {
-    background: "#ff9900",
+    background: "#bd2430",
     color: "#fff",
     border: "none",
     padding: "10px 16px",
@@ -69,7 +69,7 @@ const styles = {
   },
 
   secondaryButton: {
-    background: "#232f3e",
+    background: "#4f4f4f",
     color: "#fff",
     border: "none",
     padding: "10px 16px",
@@ -79,7 +79,7 @@ const styles = {
   },
 
   error: {
-    color: "#b91c1c",
+    color: "#c0392b",
     fontWeight: "bold"
   },
 

@@ -14,7 +14,7 @@ const styles = {
 
   label: {
     fontWeight: "bold",
-    color: "#232f3e"
+    color: "#4f4f4f"
   },
 
   input: {
@@ -34,7 +34,7 @@ const styles = {
 
   categoryTitle: {
     margin: "0 0 12px 0",
-    color: "#232f3e"
+    color: "#4f4f4f"
   },
 
   subcategoryHeader: {
@@ -63,7 +63,7 @@ const styles = {
   },
 
   button: {
-    background: "#ff9900",
+    background: "#bd2430",
     color: "#fff",
     border: "none",
     padding: "10px 16px",
@@ -73,7 +73,7 @@ const styles = {
   },
 
   secondaryButton: {
-    background: "#232f3e",
+    background: "#4f4f4f",
     color: "#fff",
     border: "none",
     padding: "8px 12px",
@@ -85,8 +85,8 @@ const styles = {
 
   smallButton: {
     background: "#f3f4f6",
-    color: "#232f3e",
-    border: "1px solid #232f3e",
+    color: "#4f4f4f",
+    border: "1px solid #4f4f4f",
     padding: "6px 10px",
     borderRadius: 6,
     cursor: "pointer",
@@ -114,12 +114,12 @@ const styles = {
 
   linkBox: {
     wordBreak: "break-all",
-    color: "#232f3e",
+    color: "#4f4f4f",
     fontWeight: "bold"
   },
 
   error: {
-    color: "#b91c1c",
+    color: "#ff0000",
     fontWeight: "bold"
   },
 

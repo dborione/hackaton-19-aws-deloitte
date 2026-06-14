@@ -35,7 +35,7 @@ import SinglePayment, { questions as singlePaymentQuestions } from "./pages/fina
 
 const styles = {
   nav: {
-    background: "#232f3e",
+    background: "#4f4f4f",
     color: "#fff",
     padding: "16px 32px",
     display: "flex",
@@ -65,7 +65,7 @@ const styles = {
   title: {
     margin: "0 0 8px 0",
     fontSize: 28,
-    color: "#232f3e"
+    color: "#4f4f4f"
   },
 
   subtitle: {
@@ -76,7 +76,7 @@ const styles = {
 
   sectionTitle: {
     margin: "32px 0 16px 0",
-    color: "#232f3e"
+    color: "#4f4f4f"
   },
 
   grid: {
@@ -104,7 +104,7 @@ const styles = {
   cardTitle: {
     margin: 0,
     fontSize: 22,
-    color: "#232f3e"
+    color: "#4f4f4f"
   },
 
   cardDescription: {
@@ -114,7 +114,7 @@ const styles = {
   },
 
   progressBadge: {
-    background: "#232f3e",
+    background: "#4f4f4f",
     color: "#fff",
     borderRadius: 999,
     padding: "4px 10px",
@@ -131,8 +131,8 @@ const styles = {
 
   backBtn: {
     background: "transparent",
-    color: "#232f3e",
-    border: "1px solid #232f3e",
+    color: "#4f4f4f",
+    border: "1px solid #4f4f4f",
     padding: "8px 14px",
     borderRadius: 4,
     cursor: "pointer",

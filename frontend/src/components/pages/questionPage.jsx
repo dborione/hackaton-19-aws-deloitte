@@ -13,7 +13,7 @@ const styles = {
 
   title: {
     margin: "0 0 24px 0",
-    color: "#232f3e"
+    color: "#4f4f4f"
   },
 
   categoryBox: {
@@ -26,7 +26,7 @@ const styles = {
 
   categoryTitle: {
     margin: "0 0 8px 0",
-    color: "#232f3e"
+    color: "#4f4f4f"
   },
 
   categoryHint: {
@@ -46,7 +46,7 @@ const styles = {
 
   label: {
     fontWeight: "bold",
-    color: "#232f3e",
+    color: "#4f4f4f",
     lineHeight: 1.4
   },
 
