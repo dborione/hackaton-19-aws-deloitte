@@ -4,6 +4,7 @@ import config from "../config";
 import AccountSharing from "./pages/accountSharing";
 import SharedInvitation from "./pages/sharedInvitation";
 import ReceivedSharedAnswers from "./pages/receivedSharedAnswers";
+import DocumentsPage from "./DocumentsPage";
 import { getProgressForGroup, getProgressForPage } from "./utils/progress";
 
 import Identity, { questions as identityQuestions } from "./pages/personal-administrative/identity";
@@ -273,6 +274,7 @@ export default function Dashboard({ token, onLogout, onNavigate }) {
   const [isLoadingProgress, setIsLoadingProgress] = useState(false);
   const [isAccountSharingOpen, setIsAccountSharingOpen] = useState(false);
   const [isReceivedAnswersOpen, setIsReceivedAnswersOpen] = useState(false);
+  const [isDocumentsOpen, setIsDocumentsOpen] = useState(false);
   const [shareToken, setShareToken] = useState(getShareTokenFromUrl());
   const [selectedSharedInviteToken, setSelectedSharedInviteToken] = useState(null);
   const [sharedInvitations, setSharedInvitations] = useState([]);
@@ -348,6 +350,7 @@ export default function Dashboard({ token, onLogout, onNavigate }) {
     setSelectedSubcategory(null);
     setIsAccountSharingOpen(false);
     setIsReceivedAnswersOpen(false);
+    setIsDocumentsOpen(false);
 
     loadProgress();
     loadSharedInvitations();
@@ -363,6 +366,7 @@ export default function Dashboard({ token, onLogout, onNavigate }) {
     setSelectedCategory(null);
     setSelectedSubcategory(null);
     setIsReceivedAnswersOpen(false);
+    setIsDocumentsOpen(false);
     setIsAccountSharingOpen(true);
   }
 
@@ -372,13 +376,25 @@ export default function Dashboard({ token, onLogout, onNavigate }) {
     setSelectedCategory(null);
     setSelectedSubcategory(null);
     setIsAccountSharingOpen(false);
+    setIsDocumentsOpen(false);
     setIsReceivedAnswersOpen(true);
+  }
+
+  function openDocuments() {
+    clearShareTokenFromUrl();
+    setSelectedSharedInviteToken(null);
+    setSelectedCategory(null);
+    setSelectedSubcategory(null);
+    setIsAccountSharingOpen(false);
+    setIsReceivedAnswersOpen(false);
+    setIsDocumentsOpen(true);
   }
 
   function openSharedInvitation(inviteToken) {
     clearShareTokenFromUrl();
     setIsAccountSharingOpen(false);
     setIsReceivedAnswersOpen(false);
+    setIsDocumentsOpen(false);
     setSelectedCategory(null);
     setSelectedSubcategory(null);
     setSelectedSharedInviteToken(inviteToken);
@@ -389,6 +405,7 @@ export default function Dashboard({ token, onLogout, onNavigate }) {
     setSelectedSharedInviteToken(null);
     setIsAccountSharingOpen(false);
     setIsReceivedAnswersOpen(false);
+    setIsDocumentsOpen(false);
     setSelectedCategory(category);
     setSelectedSubcategory(null);
   }
@@ -398,6 +415,7 @@ export default function Dashboard({ token, onLogout, onNavigate }) {
     setSelectedSharedInviteToken(null);
     setIsAccountSharingOpen(false);
     setIsReceivedAnswersOpen(false);
+    setIsDocumentsOpen(false);
     setSelectedSubcategory(subcategory);
   }
 
@@ -418,6 +436,13 @@ export default function Dashboard({ token, onLogout, onNavigate }) {
 
     if (isReceivedAnswersOpen) {
       setIsReceivedAnswersOpen(false);
+      loadProgress();
+      loadSharedInvitations();
+      return;
+    }
+
+    if (isDocumentsOpen) {
+      setIsDocumentsOpen(false);
       loadProgress();
       loadSharedInvitations();
       return;
@@ -548,7 +573,7 @@ export default function Dashboard({ token, onLogout, onNavigate }) {
           <button
             className="nav-action-btn"
             style={styles.btn}
-            onClick={() => onNavigate && onNavigate("documents")}
+            onClick={openDocuments}
           >
             Documents
           </button>
@@ -630,7 +655,24 @@ export default function Dashboard({ token, onLogout, onNavigate }) {
           </>
         )}
 
-        {!activeSharedToken && !isReceivedAnswersOpen && !isAccountSharingOpen && !selectedCategory && !selectedSubcategory && (
+        {!activeSharedToken && !isReceivedAnswersOpen && !isAccountSharingOpen && isDocumentsOpen && (
+          <>
+            <button className="back-action-btn" style={styles.backBtn} onClick={goBack}>
+              ← Back to dashboard
+            </button>
+
+            <section style={styles.header}>
+              <h1 style={styles.title}>Documents</h1>
+              <p style={styles.subtitle}>
+                Upload documents to extract information automatically or view processed documents.
+              </p>
+            </section>
+
+            <DocumentsPage token={token} />
+          </>
+        )}
+
+        {!activeSharedToken && !isReceivedAnswersOpen && !isAccountSharingOpen && !isDocumentsOpen && !selectedCategory && !selectedSubcategory && (
           <>
             <section style={styles.header}>
               <h1 style={styles.title}>A&G Funeral Dashboard</h1>
@@ -707,7 +749,7 @@ export default function Dashboard({ token, onLogout, onNavigate }) {
           </>
         )}
 
-        {!activeSharedToken && !isReceivedAnswersOpen && !isAccountSharingOpen && selectedCategory && !selectedSubcategory && (
+        {!activeSharedToken && !isReceivedAnswersOpen && !isAccountSharingOpen && !isDocumentsOpen && selectedCategory && !selectedSubcategory && (
           <>
             <button className="back-action-btn" style={styles.backBtn} onClick={goBack}>
               ← Back to dashboard
@@ -746,7 +788,7 @@ export default function Dashboard({ token, onLogout, onNavigate }) {
           </>
         )}
 
-        {!activeSharedToken && !isReceivedAnswersOpen && !isAccountSharingOpen && selectedCategory && selectedSubcategory && (
+        {!activeSharedToken && !isReceivedAnswersOpen && !isAccountSharingOpen && !isDocumentsOpen && selectedCategory && selectedSubcategory && (
           <>
             <button className="back-action-btn" style={styles.backBtn} onClick={goBack}>
               ← Back to {selectedCategory.title}

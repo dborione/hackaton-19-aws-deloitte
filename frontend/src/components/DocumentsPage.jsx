@@ -599,21 +599,6 @@ export default function DocumentsPage({ token, onBack }) {
         }
       `}</style>
 
-            <div style={styles.header}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
-                    <h1 style={styles.h1}>📄 Documents</h1>
-                    {onBack && (
-                        <button onClick={onBack} style={{ background: "transparent", color: "#555", border: "1px solid #ddd", padding: "8px 14px", borderRadius: 4, cursor: "pointer" }}>
-                            ← Back
-                        </button>
-                    )}
-                </div>
-                <p style={styles.subtitle}>
-                    Upload documents to extract information automatically or view processed documents.
-                </p>
-            </div>
-
-            {/* TAB NAVIGATION */}
             <div style={{ display: "flex", gap: 12, marginBottom: 24, borderBottom: "2px solid #e5e7eb" }}>
                 <button
                     onClick={() => setTab("upload")}
