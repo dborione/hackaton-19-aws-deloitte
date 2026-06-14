@@ -4,11 +4,11 @@ import { fromCognitoIdentityPool } from "@aws-sdk/credential-provider-cognito-id
 import config from "../config";
 
 const styles = {
-  section: { background: "#fff", borderRadius: 8, padding: 24, boxShadow: "0 1px 4px rgba(0,0,0,0.08)" },
-  title: { fontSize: 18, fontWeight: "bold", marginBottom: 16, color: "#232f3e" },
+  section: { background: "#fff", borderRadius: 8, padding: 24, boxShadow: "0 30px 40px 0 rgba(212,217,232,.25)" },
+  title: { fontSize: 18, fontWeight: "bold", marginBottom: 16, color: "#4f4f4f" },
   dropzone: { border: "2px dashed #ccc", borderRadius: 8, padding: 40, textAlign: "center", cursor: "pointer", color: "#666" },
-  dropzoneActive: { border: "2px dashed #ff9900", background: "#fff8f0" },
-  btn: { background: "#ff9900", color: "#fff", border: "none", padding: "10px 24px", borderRadius: 4, cursor: "pointer", fontWeight: "bold", marginTop: 16 },
+  dropzoneActive: { border: "2px dashed #bd2430", background: "#fff8f0" },
+  btn: { background: "#bd2430", color: "#fff", border: "none", padding: "10px 24px", borderRadius: 4, cursor: "pointer", fontWeight: "bold", marginTop: 16 },
   progress: { marginTop: 12, color: "#27ae60", fontWeight: "bold" },
   error: { marginTop: 12, color: "#c0392b" }
 };
