@@ -17,6 +17,10 @@ frontend/dist/
 frontend/.env
 frontend/.env.local
 
+# Backend
+lambda/api_backend/node_modules/
+lambda/document_processor/node_modules/
+
 # AWS credentials
 .aws/
 *.pem

@@ -1,4 +1,4 @@
-# Franchise App — Documentation Développeur
+# A&G Funeral — Documentation Développeur
 
 Application de gestion de documents pour franchises. Les utilisateurs uploadent des documents (PDF, PNG, JPG) qui sont automatiquement analysés par **Amazon Textract** pour en extraire le texte brut, les champs de formulaire et les tableaux. Les fichiers originaux sont supprimés immédiatement après extraction — seules les données structurées sont conservées.
 

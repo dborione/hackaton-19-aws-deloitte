@@ -45,9 +45,9 @@ export default function UploadDocument({ token }) {
       });
 
       await s3.send(new PutObjectCommand({
-        Bucket: config.documentsBucket,
-        Key: `uploads/${Date.now()}_${file.name}`,
-        Body: body,
+        Bucket:      config.documentsBucket,
+        Key:         `uploads/${Date.now()}_${file.name}`,
+        Body:        body,
         ContentType: file.type
       }));
 

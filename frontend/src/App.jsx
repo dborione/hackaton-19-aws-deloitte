@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { CognitoUserPool, CognitoUser, AuthenticationDetails } from "amazon-cognito-identity-js";
 import Login from "./components/Login";
 import Register from "./components/Register";
-import DocumentList from "./components/DocumentList";
-import UploadDocument from "./components/UploadDocument";
+import Dashboard from "./components/Dashboard";
+import DocumentsPage from "./components/DocumentsPage";
 import config from "./config";
 
 const userPool = new CognitoUserPool({
@@ -14,13 +14,14 @@ const userPool = new CognitoUserPool({
 const styles = {
   nav:  { background: "#232f3e", color: "#fff", padding: "16px 32px", display: "flex", justifyContent: "space-between", alignItems: "center" },
   main: { maxWidth: 900, margin: "32px auto", padding: "0 16px" },
-  btn:  { background: "#ff9900", color: "#fff", border: "none", padding: "8px 16px", borderRadius: 4, cursor: "pointer" }
+  btn:  { background: "#bd2430", color: "#fff", border: "none", padding: "8px 16px", borderRadius: 4, cursor: "pointer" }
 };
 
 export default function App() {
   const [user, setUser]     = useState(null);
   const [token, setToken]   = useState(null);
   const [screen, setScreen] = useState("login"); // "login" | "register"
+  const [page, setPage] = useState("dashboard"); // "dashboard" | "documents"
 
   useEffect(() => {
     const current = userPool.getCurrentUser();
@@ -91,16 +92,9 @@ export default function App() {
     return <Login onLogin={handleLogin} onGoRegister={() => setScreen("register")} />;
   }
 
-  return (
-    <>
-      <nav style={styles.nav}>
-        <span style={{ fontSize: 20, fontWeight: "bold" }}>Franchise App</span>
-        <button style={styles.btn} onClick={handleLogout}>Déconnexion</button>
-      </nav>
-      <main style={styles.main}>
-        <UploadDocument token={token} />
-        <DocumentList token={token} />
-      </main>
-    </>
-  );
+  if (page === "documents") {
+    return <DocumentsPage token={token} onBack={() => setPage("dashboard")} />;
+  }
+
+  return <Dashboard token={token} onLogout={handleLogout} onNavigate={setPage} />;
 }
