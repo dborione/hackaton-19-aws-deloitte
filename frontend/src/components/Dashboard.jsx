@@ -55,10 +55,12 @@ const styles = {
     textTransform: "uppercase",
     fontFamily: '"Roboto Condensed", sans-serif',
     color: "#bd2430",
-    border: "none",
     padding: "8px 16px",
     borderRadius: 4,
-    cursor: "pointer"
+    cursor: "pointer",
+    border: "1px solid #bd2430",
+    justifyContent: "center",
+    whiteSpace: "nowrap",
   },
 
   header: {
